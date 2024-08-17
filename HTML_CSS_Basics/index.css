@@ -1,0 +1,29 @@
+body {
+    background-color: #0e0e0e;
+    color: white;
+}
+
+.toplink{
+    color: grey;
+    cursor: pointer;
+}
+
+.second{
+    border: 1px solid black;
+    border-radius: 25px;
+    background-color: grey;
+    /* height: fit-content; */
+    
+}
+.headerlinks{
+ padding: 25px;
+}
+
+.text{
+    font-size: xx-large;
+}
+
+.button{
+    color: white;
+    background-color: rgb(23, 94, 145);
+}
