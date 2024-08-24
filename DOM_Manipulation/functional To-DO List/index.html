@@ -4,28 +4,105 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToDoList</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            justify-content: center;
+        }
+        
+        .input-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 250px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        #boxDiv {
+            width: 300px;
+            margin-top: 20px;
+        }
+
+        .task {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .task span {
+            flex-grow: 1;
+        }
+
+        .task button {
+            background-color: #dc3545;
+            margin-left: 10px;
+        }
+
+        .task button:hover {
+            background-color: #c82333;
+        }
+    </style>
 </head>
 <body>
-    <input type="text"></input>
-    <button onclick="addToDo()">Add To DO</button>
+    <div class="input-container">
+        <input type="text" placeholder="Enter a new task">
+        <button onclick="addToDo()">Add To DO</button>
+    </div>
+    <div id="boxDiv"></div>
+    
+    <script>
+        let ctr = 0;
+        function deleteToDo(index){
+            const el = document.getElementById(index);
+            el.parentNode.removeChild(el);
+        }
+
+        function addToDo(){
+            const el = document.querySelector("input");
+            const val = el.value;
+            if(val !== null && val.trim() !== ""){
+                const newDivEl = document.createElement("div");
+                newDivEl.setAttribute("id", ctr);
+                newDivEl.classList.add("task");
+                newDivEl.innerHTML = "<span>" + val + "</span><button onclick='deleteToDo(" + ctr + ")'>Delete</button>";
+                document.querySelector("#boxDiv").appendChild(newDivEl);
+                ctr += 1;
+                el.value = ""; // Clear the input field after adding the task
+            }
+        }
+    </script>
 </body>
-
-<script>
-    let ctr = 0;
-    function deleteToDo(index){
-        const el = document.getElementById(index);
-        el.parentNode.removeChild(el);
-    }
-
-    function addToDo(){
-        const el = document.querySelector("input");
-        const val = el.value;
-        const newDivEl = document.createElement("div");
-        newDivEl.setAttribute("id",ctr);
-        newDivEl.innerHTML = "<span >" +val+ "</span><button onclick='deleteToDo("+ctr+")'> Delete Task </button>";
-        document.querySelector("body").appendChild(newDivEl);
-        ctr = ctr+1;
-    }
-</script>
-
 </html>
