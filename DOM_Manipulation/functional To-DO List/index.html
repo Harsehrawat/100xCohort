@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDoList</title>
+</head>
+<body>
+    <input type="text"></input>
+    <button onclick="addToDo()">Add To DO</button>
+</body>
+
+<script>
+    let ctr = 0;
+    function deleteToDo(index){
+        const el = document.getElementById(index);
+        el.parentNode.removeChild(el);
+    }
+
+    function addToDo(){
+        const el = document.querySelector("input");
+        const val = el.value;
+        const newDivEl = document.createElement("div");
+        newDivEl.setAttribute("id",ctr);
+        newDivEl.innerHTML = "<span >" +val+ "</span><button onclick='deleteToDo("+ctr+")'> Delete Task </button>";
+        document.querySelector("body").appendChild(newDivEl);
+        ctr = ctr+1;
+    }
+</script>
+
+</html>
