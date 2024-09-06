@@ -1,9 +1,9 @@
 const fs = require("fs");   // here we are importing fs library using require in JS
 
-const contents = fs.readFileSync("JS basics/a.txt","utf-8");  
+const contents = fs.readFileSync("/Users/harshsehrawat/Desktop/100xCohort/100xCohort-3/JS_Basics/a.txt","utf-8");  
 console.log(contents);
 
-const contents2 = fs.readFileSync("JS basics/b.txt"); 
+const contents2 = fs.readFileSync("/Users/harshsehrawat/Desktop/100xCohort/100xCohort-3/JS_Basics/b.txt","utf-8"); 
 console.log(contents2);
 // the above code is synchronous (runs one by one sequentially)
 
@@ -15,7 +15,7 @@ function print(err,data){
     else console.log(data);
 }
 
-fs.readFile("JS basics/a.txt","utf-8",print);
+fs.readFile("/Users/harshsehrawat/Desktop/100xCohort/100xCohort-3/JS_Basics/a.txt","utf-8",print);
 fs.readFile("JS basic/b.txt","utf8",print);  // the error for this comes out before o/p for file A as in this it doesn't read the data for file B and saves time 
 // ("Guess why b line didn't execute at last !")  
 
@@ -32,7 +32,7 @@ for(var i= 0;i<10000000;i++){
     c = c+1;
 }
 
-fs.readFile("JS basics/b.txt","utf-8",print);
+fs.readFile("/Users/harshsehrawat/Desktop/100xCohort/100xCohort-3/JS_Basics/a.txt","utf-8",print);
 
 console.log("for-Loop");
 
