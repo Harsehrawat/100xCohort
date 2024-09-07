@@ -11,11 +11,15 @@
         async function sendFetchRequest(){
             const a = document.getElementById("a").value;
             const b = document.getElementById("b").value
-            const response = await axios.post("http://localhost:3000/sum",{
+            const response = await axios.post("http://localhost:3000/sum",{  
                 a : a,
                 b : b 
             })
             console.log(response.data);
+            const responeDiv = document.createElement("div");
+            responeDiv.innerHTML = response.data.answer;
+            document.querySelector("body").appendChild(responeDiv);
+
 
         }
     </script>
@@ -24,5 +28,6 @@
     <input id="a" type="text" placeholder="enter value of a"></input>
     <input id="b" type="text" placeholder="enter value of b"></input>
     <button onclick="sendFetchRequest()">sum</button>
+    
  </body>
  </html>
