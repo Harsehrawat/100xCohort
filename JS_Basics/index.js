@@ -37,3 +37,9 @@ fs.readFile("/Users/harshsehrawat/Desktop/100xCohort/class_Work/100xCohort/JS_Ba
 console.log("for-Loop");
 
 // MyFunda -> code me pehle sabhi synchrounous activities run hongi blocking other activities and then all the asysnchronous activites runs based on the thread .
+
+// take-away : 
+// Even though fs.readFile for b.txt is called first, the file reading for a.txt might complete faster due to factors like:
+
+// Smaller file size: a.txt might be smaller than b.txt, allowing it to be read quicker.
+// Disk I/O: Random disk access might cause a.txt to be fetched faster than b.txt.
