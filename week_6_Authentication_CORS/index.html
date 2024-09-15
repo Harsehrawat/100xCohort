@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AUTHORIZATION</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.6/axios.min.js"></script>
+    <script>
+        async function signup(){
+            const username = document.querySelector("input[name='Usignup']").value;
+            const password = document.querySelector("input[name='Psignup']").value;
+            // now pass the url and var. paramter to axios fn
+            const respone = await axios.post("http://localhost:3000/signup",{
+                username : username,
+                password : password
+            })
+            // now store this .json data into a local var.
+            const data = await respone.data
+            // now create type of elemnt u want to store the data in
+            const respDiv = document.createElement("div");
+            respDiv.innerHTML = data.message;
+            // now append this respDiv 
+            document.querySelector("body").appendChild(respDiv);
+        }
+
+        async function signin() {
+            const username = document.querySelector("input[name='Usignin']").value;
+            const password = document.querySelector("input[name='Psignin']").value;
+            // now pass the url and var. as second paramtere
+            const respone = await axios.post("http://localhost:3000/sign_in",{
+                username : username,
+                password : password
+            })
+            // token to be stored in browser local Storage
+            localStorage.setItem("token" , respone.data.token);
+            alert("you are signed in !");
+            // now we have to repeat the same process.
+        }
+
+        async function showInfo() {
+    try {
+        const response = await axios.get("http://localhost:3000/me", {
+            headers: {
+                token: localStorage.getItem("token")
+            }
+        });
+        const respDiv = document.createElement("div");
+        respDiv.innerHTML = response.data.username;  // For security, don't show the password
+        document.querySelector("body").appendChild(respDiv);
+    } catch (error) {
+        console.error("Error fetching information:", error);
+    }
+}
+
+    </script>
+</head>
+<body>
+    <div>
+        Signup
+        <input type="text" name="Usignup" placeholder="Username">
+        <input type="password" name="Psignup" placeholder="Password">
+        <button onclick="signup()">Submit</button>
+    </div>
+    <div>
+        Signin
+        <input type="text" name="Usignin" placeholder="Username">
+        <input type="password" name="Psignin" placeholder="Password">
+        <button onclick="signin()">Submit</button>
+    </div>
+    <div>
+        <button id="showInformation" onclick="showInfo()">Show Account Information</button>
+    </div>
+    <div>
+        <button onclick="logout()">Logout</button>
+    </div>
+</body>
+</html>
