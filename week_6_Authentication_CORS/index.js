@@ -1,95 +1,113 @@
-// create a middleware called auth that verifies if a user is logged in and ends the request early if the user isn't logged in
-
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
-
-const JWT_SECRET = "randomilovekiara";
 const app = express();
 
+app.use(cors());
+app.use(express.json());
+
+
+// hosting .html file and .js file on same server
 app.get("/",function(req,res){
-    res.sendFile(__dirname + "/index.html");  // this way Iam avoiding using cors and hositng my BE and FE on diff. domains,
-        // now on opening my BE server , it will host the html file itself in the same server .
+    res.sendFile(__dirname+"/week_6_Authentication_CORS/index.html")
 })
 
-// Middlewares
-app.use(cors()); // For allowing CORS
-app.use(express.json()); // For parsing JSON bodies
 
+const JWT_SECRET = "randomilovekiara";
+
+// global in-memory var.
 let user = [];
 
-// /signup route
-app.post("/signup", function(req, res) {
-    const uname = req.body.username;
-    const psswd = req.body.password;
+app.post("/signin",function(req,res){
+    // fetch the data from body
+    const username = req.body.username;
+    const password = req.body.password;
 
-    if (user.find(u => u.username === uname)) {
-        return res.json({
-            message: "Username already taken"
+    // check uniqueness of username 
+    if(user!=null){
+        if(user.find(u=>u.username==username)){
+            res.json({
+                message : "username already taken"
+            })
+        }
+    }
+    //push to user arr and return response
+    user.push({
+        username : username,
+        password : password
+    });
+    // return the response
+    res.json({
+        message : "signed-in successfully"
+    })
+})
+
+app.post("/login", function(req, res) {
+    // fetch the credentials
+    const username = req.body.username;
+    const password = req.body.password;
+
+    // check if wrong password
+    if (user.find(u => u.username == username && u.password != password)) {
+        return res.status(403).send({
+            message: "wrong password"
         });
     }
 
-    // Add new user to the array
-    user.push({
-        username: uname,
-        password: psswd
-    });
+    // check if username not found
+    if (!user.find(u => u.username == username)) {
+        return res.status(403).send({
+            message: "no such user found"
+        });
+    }
 
-    // Send success message
-    res.json({
-        message: "User created for username: " + uname
-    });
-});
-
-// /sign_in route
-app.post("/sign_in", function(req, res) {
-    const uname = req.body.username;
-    const psswd = req.body.password;
-
-    // Find user by username
-    const existingUser = user.find(u => u.username === uname && u.password === psswd);
-    if (existingUser) {
-        // Create a JWT token with username
+    // successful login, generate token
+    if (user.find(u => u.username == username && u.password == password)) {
         let token = jwt.sign({
-            username: uname
+            username: username
         }, JWT_SECRET);
 
-        // Send the response with token
-        res.json({
-            message: "You are signed in as: " + uname,
+        return res.json({
+            message: "you are logged-in successfully",
             token: token
         });
-    } else {
+    }
+});
+
+
+app.get("/me", function(req, res) {
+    // Fetch token from headers
+    const token = req.headers['token'];
+
+    if (!token) {
+        return res.status(400).send({
+            message: "Token is required"
+        });
+    }
+
+    try {
+        // Verify the token
+        const decoded = jwt.verify(token, JWT_SECRET);
+        const username = decoded.username;
+
+        // Find user by username
+        const foundUser = user.find(u => u.username === username);
+
+        if (foundUser) {
+            res.json({
+                username: foundUser.username,
+                password: foundUser.password
+            });
+        } else {
+            res.status(403).send({
+                message: "Invalid Token"
+            });
+        }
+    } catch (err) {
         res.status(403).send({
-            message: "No such user present or invalid password"
+            message: "Invalid Token"
         });
     }
 });
 
-function auth(req,res,next){
-    const token = req.headers.token;
-    const decodedUsername = jwt.verify(token,JWT_SECRET);
-    if(user.find(u => u.username==decodedUsername)){
-        req.username = decodedUsername.username;
-        req.password = decodedUsername.password;
-        next();
-    }else{
-        res.status(403).send({
-            message : "invalid token"
-        })
-    }
-}
-
-// /me route to get user details
-app.get("/me", auth,function(req, res) {
-    const currUser = req.username;
-    res.json({
-        username : currUser.username,
-        password : req.password
-    })
-});
-
-// Start the server
-app.listen(3000, () => {
-    console.log("Server is running on port 3000");
-});
+app.listen(3000);
