@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do App - Authorization</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .auth-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .auth-container button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .auth-container button:hover {
+            background-color: #0056b3;
+        }
+        .auth-container input {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        #authForm {
+            margin-top: 20px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.6/axios.min.js"></script>
+</head>
+<body>
+    <!-- Authorization buttons -->
+    <div class="auth-container">
+        <h2>Authorization</h2>
+        <button id="signInBtn" onclick="showSignInForm()">Sign Up</button>
+        <br>
+        <button id="loginBtn" onclick="showLoginForm()">Log In</button>
+        
+        <!-- Form container (Sign-Up/Login forms will be injected here) -->
+        <div id="authForm"></div>
+    </div>
+
+    <script>
+        function showSignInForm() {
+            // Create a Sign-Up form
+            const formHtml = `
+                <h3>Sign Up</h3>
+                <input type="text" id="usernameSignUp" placeholder="Enter Username" />
+                <input type="password" id="passwordSignUp" placeholder="Enter Password" />
+                <button onclick="submitSignIn()">Submit</button>
+            `;
+            document.getElementById('authForm').innerHTML = formHtml;
+        }
+
+        function showLoginForm() {
+            // Create a Login form
+            const formHtml = `
+                <h3>Log In</h3>
+                <input type="text" id="usernameLogin" placeholder="Enter Username" />
+                <input type="password" id="passwordLogin" placeholder="Enter Password" />
+                <button onclick="submitLogin()">Submit</button>
+            `;
+            document.getElementById('authForm').innerHTML = formHtml;
+        }
+
+        async function submitSignIn() {
+            // Fetch input values for Sign-Up
+            const username = document.getElementById('usernameSignUp').value;
+            const password = document.getElementById('passwordSignUp').value;
+            try {
+                // Make the POST request to the sign-in endpoint
+                const resp = await axios.post("http://localhost:3000/signin", {
+                    username: username,
+                    password: password
+                });
+                const data = resp.data.message;
+                alert(data);
+                showLoginForm(); // Redirect to login form
+            } catch (error) {
+                console.error("Sign-up error:", error);
+            }
+        }
+
+        async function submitLogin() {
+            // Fetch input values for Login
+            const username = document.getElementById('usernameLogin').value;
+            const password = document.getElementById('passwordLogin').value;
+            try {
+                const resp = await axios.post("http://localhost:3000/login", {
+                    username: username,
+                    password: password
+                });
+                localStorage.setItem("token", resp.data.token); // Corrected to set the token
+                const message = resp.data.message;
+                alert(message);
+                // now go to to-do interface .
+            } catch (error) {
+                console.error("Login error:", error);
+            }
+        }
+    </script>
+</body>
+</html>
