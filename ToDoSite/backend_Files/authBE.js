@@ -1,8 +1,10 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
+const bcrypt = require("bcrypt");
 const app = express();
-
+const userModel = require("./db");
+const todoModel = require("./db");
 
 app.use(express.static('public')); // Serve static files
 app.use(cors());
@@ -10,62 +12,55 @@ app.use(express.json());
 
 const JWT_SECRET = "randomilovekiara";
 
-// global in-memory var.
-let user = [];
-
-app.post("/signin",function(req,res){
-    // fetch the data from body
+app.post("/signup",async function(req,res){
+    // take data from FE
     const username = req.body.username;
-    const password = req.body.password;
-
-    // check uniqueness of username 
-    if(user!=null){
-        if(user.find(u=>u.username==username)){
-            res.json({
-                message : "username already taken"
-            })
-        }
-    }
-    //push to user arr and return response
-    user.push({
-        username : username,
-        password : password
-    });
-    // return the response
-    res.json({
-        message : "signed-in successfully"
+    const password= req.body.password;
+    // check if validUsername
+    const validUsername =await userModel.findOne({
+        username : username
     })
+    if(validUsername){
+        res.json({
+            message : "username already taken"
+        })
+    }
+    else{
+        // use hashed salting using bcrypt library to store the passwords associated w/ users 
+        const hashedPass = await bcrypt.hash(password,5);
+        await userModel.insertMany({
+            username : username,
+            password : hashedPass,
+        })
+        res.json({
+            message : "account created , now you can login"
+        })
+    }
 })
 
-app.post("/login", function(req, res) {
-    // fetch the credentials
+app.post("/login",async function(req, res) {
+    // fetch data from FE
     const username = req.body.username;
     const password = req.body.password;
+    // verify using bcrypt
+    const validateUser = await userModel.findOne({
+        username : username
+    })
 
-    // check if wrong password
-    if (user.find(u => u.username == username && u.password != password)) {
-        return res.status(203).send({
-            message: "wrong password"
-        });
-    }
-
-    // check if username not found
-    if (!user.find(u => u.username == username)) {
-        return res.status(203).send({
-            message: "no such user found"
-        });
-    }
-
-    // successful login, generate token
-    if (user.find(u => u.username == username && u.password == password)) {
+    const verifyCred = bcrypt.compare(password,validateUser.password);
+    if(verifyCred){
+        // return a token and a success message
         let token = jwt.sign({
-            username: username
+            id : validateUser._id.toString()
         }, JWT_SECRET);
-
-        return res.json({
-            message: "you are logged-in successfully",
-            token: token
-        });
+        res.json({
+            token : token
+        })
+    }
+    else{
+        res.status(203).send({
+            message : "Invalid Credentials"
+        })
     }
 });
 
