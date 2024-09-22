@@ -1,4 +1,5 @@
 // in it , we'ill try creating back-end for todoApp using mongoDB
+const bcrypt = require("bcrypt");
 const express = require("express");
 const app = express();
 const jwt  = require("jsonwebtoken");
@@ -22,9 +23,12 @@ app.post("/signup",async function(req,res){
             message : "this username is already taken"
         })
     }else{
+        // hash the pass obtained using salting through bcrypt library and then store this hashed pass into db {bcrypt.hash would pass salt and hashed pass into one string to hashedPass var.}
+        const hashedPass = await bcrypt.hash(password,5);
+
         await UserModel.insertMany({
             username : username,
-            password : password
+            password : hashedPass
         })
         // send verifying message
         res.json({
@@ -41,22 +45,28 @@ app.post("/signin",async function(req,res){
     // verify credentials if valid-> generate token 
     const findUser = await UserModel.findOne({
         username : username,
-        password : password
     })
-
     if(findUser){
-        //create jwt
-        let token = jwt.sign({
-            id : findUser._id.toString()
-        },JWT_SECRET_KEY)
-        // return token
-        res.json({
-            token : token
-        })
+        const matchPassword = await bcrypt.compare(password,findUser.password); // this fn will auto compare and return if this raw pass is matching the hashedPass without us explicitly fetching the salt and then generating using raw password to match
+        if(matchPassword){
+            //create jwt
+            let token = jwt.sign({
+                id : findUser._id.toString()
+            },JWT_SECRET_KEY)
+            // return token
+            res.json({
+                token : token
+            })
+        }
+        else{
+            res.json({
+                message : "wrong password"
+            })
+        }
     }
     else{
         res.status(403).send({
-            message : "Invalid Credentials"
+            message : "wrong username"
         })
     }
 })
