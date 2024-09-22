@@ -44,14 +44,14 @@ app.post("/login", function(req, res) {
 
     // check if wrong password
     if (user.find(u => u.username == username && u.password != password)) {
-        return res.status(403).send({
+        return res.status(203).send({
             message: "wrong password"
         });
     }
 
     // check if username not found
     if (!user.find(u => u.username == username)) {
-        return res.status(403).send({
+        return res.status(203).send({
             message: "no such user found"
         });
     }
