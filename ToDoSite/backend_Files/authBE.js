@@ -3,8 +3,8 @@ const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 const app = express();
-const userModel = require("./db");
-const todoModel = require("./db");
+const { userModel, todoModel } = require("./db");
+
 
 app.use(express.static('public')); // Serve static files
 app.use(cors());
@@ -39,65 +39,74 @@ app.post("/signup",async function(req,res){
 })
 
 app.post("/login",async function(req, res) {
-    // fetch data from FE
-    const username = req.body.username;
-    const password = req.body.password;
-    // verify using bcrypt
-    const validateUser = await userModel.findOne({
+    // fetch from FE
+    const username  = req.body.username;
+    const password=  req.body.password;
+    // verify the username
+    const verifyUser = await userModel.findOne({
         username : username
     })
-
-    const verifyCred = bcrypt.compare(password,validateUser.password);
-    if(verifyCred){
-        // return a token and a success message
-        let token = jwt.sign({
-            id : validateUser._id.toString()
-        }, JWT_SECRET);
-        res.json({
-            token : token
-        })
+    if(verifyUser){
+        // check for password verify
+        const verifyPassword = await bcrypt.compare(password,verifyUser.password);
+        if(verifyPassword){
+            // generate token 
+            let token = jwt.sign({
+                id : verifyUser._id.toString()
+            },JWT_SECRET);
+            res.json({
+                token : token
+            })
+        }
+        else{
+            res.status(203).send({
+                message : "wrong password"
+            })
+        }
     }
     else{
         res.status(203).send({
-            message : "Invalid Credentials"
+            message : "no such user found"
         })
     }
 });
 
 
-app.get("/me", function(req, res) {
+app.get("/todos",auth,async function(req, res) {
     // Fetch token from headers
-    const token = req.headers['token'];
-
-    if (!token) {
-        return res.status(400).send({
-            message: "Token is required"
-        });
-    }
-
-    try {
-        // Verify the token
-        const decoded = jwt.verify(token, JWT_SECRET);
-        const username = decoded.username;
-
-        // Find user by username
-        const foundUser = user.find(u => u.username === username);
-
-        if (foundUser) {
-            res.json({
-                username: foundUser.username,
-                password: foundUser.password
-            });
-        } else {
-            res.status(403).send({
-                message: "Invalid Token"
-            });
-        }
-    } catch (err) {
-        res.status(403).send({
-            message: "Invalid Token"
-        });
-    }
+    const userId = req.userId;
+    const todos = await todoModel.find({
+        userId : userId
+    })
+    const title = todos.map(todo=>todo.title);
+    res.json({
+        title
+    })
 });
+
+function auth(req,res,next){
+    const token = req.headers.token;
+    const tokenPayload = jwt.verify(token,JWT_SECRET);
+    if(tokenPayload){
+        req.userId = tokenPayload.id;
+        next();
+    }
+    else{
+        res.status(403)
+    }
+}
+
+app.post("/add_todos",auth,async function (req,res) {
+    const userId = req.userId;
+    const title = req.body.title;
+    const addToDo = await todoModel.create({
+        title,
+        userId
+    })
+    res.json({
+        message : "todo added successfully"
+    })
+})
+
 
 app.listen(3000);
