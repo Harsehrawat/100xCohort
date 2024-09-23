@@ -108,14 +108,26 @@ app.post("/add_todos",auth,async function (req,res) {
     })
 })
 
-app.post("/delete_todos",auth,async function (req,res) {
+app.post("/delete_todos", auth, async function(req, res) {
     const userId = req.userId;
-    const todoId = userId._id.toString();
-    await todoModel.findOneAndDelete({
-        todoId : todoId
-    })
+    const todoId = req.body.todoId; // Get todoId from the request body
 
-})
+    try {
+        const deletedTodo = await todoModel.findOneAndDelete({
+            _id: todoId,
+            userId: userId // Ensure the todo belongs to the user
+        });
+
+        if (deletedTodo) {
+            res.json({ message: "Todo deleted successfully" });
+        } else {
+            res.status(404).json({ message: "Todo not found" });
+        }
+    } catch (error) {
+        res.status(500).json({ message: "Error deleting todo", error: error.message });
+    }
+});
+
 
 
 app.listen(3000);
