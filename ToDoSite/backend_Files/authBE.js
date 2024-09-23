@@ -108,5 +108,14 @@ app.post("/add_todos",auth,async function (req,res) {
     })
 })
 
+app.post("/delete_todos",auth,async function (req,res) {
+    const userId = req.userId;
+    const todoId = userId._id.toString();
+    await todoModel.findOneAndDelete({
+        todoId : todoId
+    })
+
+})
+
 
 app.listen(3000);
