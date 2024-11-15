@@ -24,7 +24,7 @@ userRouter.post("/signup",async function(req,res){
         })
 
         res.json({
-            message : "successfull sign-in"
+            message : "successfull sign-up"
         })
 
     } catch (error) {
@@ -37,8 +37,29 @@ userRouter.post("/signup",async function(req,res){
 
 })
 
-userRouter.post("/signin",function(req,res){
+userRouter.post("/signin",async function(req,res){
+    try {
+        const {email , password} = req.body;
+        const user = await userModel.findOne({email : email});
+        if(!user){
+            return res.status(400).json({
+                message : "no such email found"
+            })
+        }
+        const validatePassword = await bcrypt.compare(password,user.password);
+        if(!validatePassword){
+            return res.status(400).json({
+                message : " wrong password" 
+            })
+        }
 
+    } catch (error) {
+        console.error("error during sign-in :"+error);
+        res.json({
+            message : "signin failed",
+            error : error.message
+        })
+    }
 })
 
 userRouter.get("/my-courses",function(req,res){
