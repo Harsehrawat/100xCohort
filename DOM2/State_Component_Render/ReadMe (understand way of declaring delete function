@@ -8,6 +8,7 @@ When you use buttonEl.onclick = function() { deleteToDo(index); };, you're not c
 Example to Illustrate the Difference:
 Immediate Execution:
 
+
 javascript
 Copy code
 buttonEl.onclick = deleteToDo(index);
