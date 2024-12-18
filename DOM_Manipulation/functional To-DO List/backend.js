@@ -6,7 +6,7 @@ let counter = 0;
 
             // check if there's no task remaining
             const boxDiv = document.getElementById("boxDiv");
-            if(boxDiv.children.length==0){
+            if(boxDiv.children.length==1){
                 document.getElementById("emptyMessage").style.display = "block";
             }
         }
