@@ -1,10 +1,10 @@
 const fs = require("fs");   // here we are importing fs library using require in JS
 
-const contents = fs.readFileSync("/Users/harshsehrawat/Desktop/100xCohort/class_Work/100xCohort/JS_Basics/a.txt","utf-8");  
-console.log(contents);
+// const contents = fs.readFileSync("/Users/harshsehrawat/Desktop/100xCohort/class_Work/100xCohort/JS_Basics/a.txt","utf-8");  
+// console.log(contents);
 
-const contents2 = fs.readFileSync("/Users/harshsehrawat/Desktop/100xCohort/class_Work/100xCohort/JS_Basics/b.txt","utf-8"); 
-console.log(contents2);
+// const contents2 = fs.readFileSync("/Users/harshsehrawat/Desktop/100xCohort/class_Work/100xCohort/JS_Basics/b.txt","utf-8"); 
+// console.log(contents2);
 // the above code is synchronous (runs one by one sequentially)
 
  
@@ -32,7 +32,7 @@ for(var i= 0;i<10000000;i++){
     c = c+1;
 }
 
-fs.readFile("/Users/harshsehrawat/Desktop/100xCohort/class_Work/100xCohort/JS_Basics/a.txt","utf-8",print);
+fs.readFile("/Users/harshsehrawat/Desktop/100xCohort/CLASS_WORK/100xCohort/JS_Basics/a.txt","utf-8",print);
 
 console.log("for-Loop");
 

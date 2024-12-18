@@ -7,7 +7,7 @@ const {adminModel} = require("../database");
 const adminRouter = Router();
 
 adminRouter.post("/signup",function(req,res){
-
+        
 })
 
 adminRouter.post("/signin",function(req,res){

@@ -47,7 +47,7 @@
         }
 
         #boxDiv {
-            width: 300px;
+            width: 400px;
             margin-top: 20px;
         }
 
@@ -69,6 +69,7 @@
         .task button {
             background-color: #dc3545;
             margin-left: 10px;
+            margin-right: 10px;
         }
 
         .task button:hover {
@@ -91,16 +92,40 @@
         }
 
         function addToDo(){
-            const el = document.querySelector("input");
-            const val = el.value;
-            if(val !== null && val.trim() !== ""){
-                const newDivEl = document.createElement("div");
-                newDivEl.setAttribute("id", ctr);
-                newDivEl.classList.add("task");
-                newDivEl.innerHTML = "<span>" + val + "</span><button onclick='deleteToDo(" + ctr + ")'>Delete</button>";
-                document.querySelector("#boxDiv").appendChild(newDivEl);
+            const inputElement = document.querySelector("input");
+            const taskValue = inputElement.value.trim();
+
+            if(taskValue){
+                // create a new div..
+                const taskDiv = document.createElement("div");
+                taskDiv.setAttribute("id",'task-'+ctr);
+                taskDiv.classList.add("task"); // added it to a class "task"
+                // as we've taskDiv .. we gotta add taskValue and a delete and update button to our taskDiv
+                const taskSpan = document.createElement("span");
+                taskSpan.textContent = taskValue;
+                
+                // delete and update button
+                const updateButton = document.createElement("button");
+                const deleteButton = document.createElement("button");
+                
+                updateButton.textContent = "EDIT";
+                deleteButton.textContent = "CLEAR";
+
+                updateButton.addEventListener("click",() => updateToDo(ctr));
+                deleteButton.addEventListener("click",() => deleteToDo('task-'+ctr));
+
+                // append the buttons along with taskSPan to the taskDIV
+                taskDiv.appendChild(taskSpan);
+                taskDiv.appendChild(updateButton);
+                taskDiv.appendChild(deleteButton)
+
+                // at last, append taskDiv to mainBody's divbox
+                document.querySelector("#boxDiv").appendChild(taskDiv);
+
+                //update ctr and clear current inputElement
                 ctr += 1;
-                el.value = ""; // Clear the input field after adding the task
+                inputElement.value = "";
+                
             }
         }
     </script>
