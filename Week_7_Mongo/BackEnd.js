@@ -1,4 +1,5 @@
 // in it , we'ill try creating back-end for todoApp using mongoDB
+const path = require("path"); 
 const bcrypt = require("bcrypt");
 const express = require("express");
 const app = express();
@@ -7,6 +8,8 @@ const JWT_SECRET_KEY = "randomilovekiara";
 app.use(express.json());
 const cors = require("cors");
 app.use(cors());  // Allow all domains, or configure specific domains
+
+app.use("/signin", express.static(path.join(__dirname, "signin_Login")));
 
 
 // assign the exporting db model you want to import into this file
@@ -22,7 +25,9 @@ app.post("/signup",async function(req,res){
         username : username
     })
     if(ifUsernameExists){
-        res.send(0);
+        res.json({
+            message : "This username already taken!"
+        })
     }else{
         // hash the pass obtained using salting through bcrypt library and then store this hashed pass into db {bcrypt.hash would pass salt and hashed pass into one string to hashedPass var.}
         const hashedPass = await bcrypt.hash(password,5);
@@ -32,7 +37,9 @@ app.post("/signup",async function(req,res){
             password : hashedPass
         })
         // send verifying message
-        res.send(1);
+        res.json({
+            message : "User created successfully"
+        })
     }
 
 })
@@ -64,7 +71,7 @@ app.post("/signin",async function(req,res){
         }
     }
     else{
-        res.status(403).send({
+        res.status(403).json({
             message : "wrong username"
         })
     }
@@ -110,5 +117,10 @@ app.get("/get_todos",auth, async function(req,res){
         todos
     })
 })
+
+// Serve the to-do HTML page
+app.get("/todo", (req, res) => {
+    res.sendFile(path.join(__dirname, "frontEnd.html"));
+});
 
 app.listen(3000);
