@@ -8,11 +8,10 @@ async function signup() {
             username : username,
             password : password
         });
-        if(response.data==1){
+        if(response.data.message == "User created successfully"){
             alert("sign-in successfull! Log-in using same credentials to access website");
             // FTA -> after alert.. my sign-in credentials should disappear for re-entering for log-in
-        }
-        else{
+        }else{
             alert("this username is already in use");
         }
     }
@@ -39,7 +38,7 @@ async function login() {
         else{
             localStorage.setItem("authToken",token);
             // now re-direct logged-in user to the todo Website
-            window.location.href = "/Users/harshsehrawat/Desktop/100xCohort/class_Work/Week_7_Mongo/frontEnd.html";
+            window.location.href = "http://localhost:3000/todo";
         }
     }
     catch(error){
