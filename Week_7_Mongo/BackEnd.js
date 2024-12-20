@@ -13,8 +13,6 @@ app.use(cors());  // Allow all domains, or configure specific domains
 app.use(express.static(path.join(__dirname)));
 app.use(express.static(path.join(__dirname, "signin_Login")));
 
-
-
 // assign the exporting db model you want to import into this file
 const { UserModel, todoModel} = require("./db");
 
@@ -122,42 +120,42 @@ app.get("/get_todos",auth, async function(req,res){
     })
 })
 
-app.delete("/delete_todos", auth, async function (req, res) {
+app.delete("/delete_todos",auth,async function (req,res){
     const userId = req.userId;
     const todoId = req.headers.id;
-
-    // Validate todoId before converting it to ObjectId
-    if (!mongoose.Types.ObjectId.isValid(todoId)) {
-        return res.status(400).json({
-            message: `Invalid todoId received: ${todoId}`
-        });
-    }
-
-    try {
+    todoId = new mongoose.Types.ObjectId(todoId);
+    // find and delete from db
+    try{
         const removeTodo = await todoModel.findOneAndDelete({
-            _id: new mongoose.Types.ObjectId(todoId), // Convert to ObjectId
+            _id: todoId,
             userId: userId
         });
 
-        if (!removeTodo) {
-            res.status(404).json({
-                message: "Error deleting todo: task not found or unauthorized"
-            });
-        } else {
-            res.json({
-                message: "Task removed successfully"
-            });
+        if(!todoId){
+            return res.json({
+                message : "invalid todoId received : " + todoId
+            })
         }
-    } catch (error) {
-        console.error("Error while deleting todo:", error);
-        res.status(500).json({
-            message: "Error deleting todo"
-        });
+        
+        if(!removeTodo){
+            res.json({
+                message : "error deleting todo"
+            })
+        } else{
+            res.json({
+                message : "task removed successfully"
+            })
+        }
     }
-});
+    catch(error){
+        console.log("error while deleting todo : ",error);
+        res.json({
+            message : "error deleting "
+        })
 
+    }
+})
 
-// Serve the to-do HTML page
 app.get("/todo", (req, res) => {
     res.sendFile(path.join(__dirname, "frontEnd.html"));
 });
