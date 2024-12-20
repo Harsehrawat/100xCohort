@@ -1,4 +1,5 @@
 // in it , we'ill try creating back-end for todoApp using mongoDB
+const mongoose = require("mongoose");
 const path = require("path"); 
 const bcrypt = require("bcrypt");
 const express = require("express");
@@ -9,7 +10,9 @@ app.use(express.json());
 const cors = require("cors");
 app.use(cors());  // Allow all domains, or configure specific domains
 
-app.use("/signin", express.static(path.join(__dirname, "signin_Login")));
+app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname, "signin_Login")));
+
 
 
 // assign the exporting db model you want to import into this file
@@ -78,17 +81,18 @@ app.post("/signin",async function(req,res){
 })
 
 app.post("/create_todos",auth,function(req,res){
-   const userId = req.userId;
-   const title = req.body.title;
-   // pass userId and title to todo collection
-   todoModel.create({
-    userId,
-    title
-   })
 
-   res.json({
-    userId : userId
-   })
+    const userId = req.userId;
+    const title = req.body.title;
+    // pass userId and title to todo collection
+    todoModel.create({
+        userId,
+        title
+    })
+
+    res.json({
+        message : "Added to database"
+    })
 })
 
 function auth(req,res,next){
@@ -117,6 +121,41 @@ app.get("/get_todos",auth, async function(req,res){
         todos
     })
 })
+
+app.delete("/delete_todos", auth, async function (req, res) {
+    const userId = req.userId;
+    const todoId = req.headers.id;
+
+    // Validate todoId before converting it to ObjectId
+    if (!mongoose.Types.ObjectId.isValid(todoId)) {
+        return res.status(400).json({
+            message: `Invalid todoId received: ${todoId}`
+        });
+    }
+
+    try {
+        const removeTodo = await todoModel.findOneAndDelete({
+            _id: new mongoose.Types.ObjectId(todoId), // Convert to ObjectId
+            userId: userId
+        });
+
+        if (!removeTodo) {
+            res.status(404).json({
+                message: "Error deleting todo: task not found or unauthorized"
+            });
+        } else {
+            res.json({
+                message: "Task removed successfully"
+            });
+        }
+    } catch (error) {
+        console.error("Error while deleting todo:", error);
+        res.status(500).json({
+            message: "Error deleting todo"
+        });
+    }
+});
+
 
 // Serve the to-do HTML page
 app.get("/todo", (req, res) => {
