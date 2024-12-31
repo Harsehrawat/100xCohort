@@ -9,7 +9,7 @@ function App() {
             <PostComponent 
             name={"Harsh"}
             image={"https://images.unsplash.com/photo-1497899236524-c79659901d7c?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmFieSUyMGFuaW1hbHN8ZW58MHx8MHx8fDA%3D"}
-            followers={128}
+            subtitle={"128 Followers"}
             time={"2 min ago"}
             description={"Harsh is the youngest brother out of 4"}
             />
@@ -18,7 +18,7 @@ function App() {
             <PostComponent
             name={"Akash"}
             image= {"https://media.istockphoto.com/id/1341341634/photo/cute-baby-chimpanzee-portrait.jpg?s=612x612&w=0&k=20&c=UK7b8hsMQL30ma_6XEL7MN6khgUyDXKRxTpkY_JaSek="}
-            followers={1293}
+            subtitle={"1293 Followers"}
             time={"active now"}
             description={"Akash is second youngest brother"}
             />
@@ -27,8 +27,8 @@ function App() {
             <PostComponent
             name={"Sumit"}
             image= {"https://images.ctfassets.net/hrltx12pl8hq/1D85eAdM0IhXrEYsoOt7Ut/107424ea3e7e10ab3203446dae175cf7/3_jungle_animals.webp"}
-            followers={545}
-            time={"2 weeks ago"}
+            subtitle={"Promoted"}
+            // here time is missing n i've to handle this case .
             description={"Sumit is only younger to Ravi"}
             />
           </div>
@@ -36,7 +36,7 @@ function App() {
             <PostComponent
             name={"Ravi"}
             image= {"https://cdn.britannica.com/71/149571-050-C33E9F0F/Brown-bear-Finland.jpg?w=920&h=518&c=crop"}
-            followers={600}
+            subtitle={"600 Followers"}
             time={"1 hr ago"}
             description={"Ravi is the oldest brother"}
             />
@@ -59,7 +59,7 @@ const style = {
 };
 
 // Create a function component named PostComponent that will be rendered in the App component
-function PostComponent({image ,name, followers, time,description}) {
+function PostComponent({image ,name, subtitle, time,description}) {
   // return JSX that will be rendered
   return (
       // Apply style object to the div element
@@ -68,8 +68,12 @@ function PostComponent({image ,name, followers, time,description}) {
           <img src={image} alt="can't load" style={{height: '100%', width: 'auto', borderRadius: '5px'}}/>
           <div style={ {marginLeft : 10 , fontSize : 16}}>
             <b>{name}</b>
-            <div>{followers}</div>
-            <div>{time}</div>
+            <div>{subtitle}</div>
+            {/* // now for time i've to opt for conditional rendering  */}
+            {time !==undefined ? <div style={{display : "flex"}}>
+              <div>{time}</div>
+              <img src="https://media.istockphoto.com/id/1267200399/vector/clock-vector-icon-isolated-on-white-background-outline-thin-line-clock-icon-for-website.jpg?s=612x612&w=0&k=20&c=JabL97PMMJ6k0PtY2BmUWMBI5kjNCnu5fnAoAwByrQQ=" alt="clock icon" style={{width : 20, height : 20 , marginTop : 3}}/>
+            </div> : null}
           </div>
         </div>
         <div style={{marginTop : 10}}>
