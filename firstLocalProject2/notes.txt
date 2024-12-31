@@ -1,0 +1,42 @@
+In this .. I will learning to re-render posts using setState .
+
+For this In Post.jsx -> contains structure and rendering of my post components
+
+Now inside App.jsx -> First i imported PostCOmponent defined in Post.jsx
+
+I have 2 functions ->
+1. <PostCOmponent /> in which i've to pass props and send to render it 
+2. addPost function which is an array of all posts .
+
+How addPost works ?
+
+const [posts,setPosts] = useState([]) // declared an empty array of posts and it's setState
+
+// for each click on addPost button , i've to collect postObject of resp. post and send to render it .
+1. how do i collect postObject on each addPost button click?
+-> function addPost(){
+    // always use setVariables
+    setPosts([...posts],{
+        image : "imgLink",
+        name : "harsh",
+        subtitle : "221 followers"
+        time : "2m age"
+        description : "harsh is good "
+    })
+}
+
+// collect postObject and add them at the end of current posts array using [...posts]
+
+2. how do i send to render it to <PostCOmponent /> ?
+-> from collected postObjects inside posts array , convert it to post components that would be send to render to PostCOmponent function
+    const postComponents = posts.map(post => <PostCOmponent 
+        image : {posts.image},
+        name : {post.name},
+        subtitle : {posts.subtitle},
+        time : {posts.time},
+        description : {posts.description}
+        /> 
+        )
+
+
+* now just send this postComponents to get rendered
