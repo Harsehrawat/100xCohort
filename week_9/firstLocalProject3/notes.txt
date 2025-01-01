@@ -1,0 +1,18 @@
+* Generally useEffect to be used when :
+-- fetching data from an API Call
+-- modifying the DOM Manually
+-- subscribing to events
+-- starting a clock
+
+* structure of useEffect
+-- useEffect( function(){
+
+}, []);
+
+* setCount ( count){
+    return count + 1;
+}
+
+can be written as :
+
+-- setCount(count => count+1);
