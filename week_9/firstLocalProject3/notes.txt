@@ -9,6 +9,14 @@
 
 }, []);
 
+* what if i also had a useEffect with a state var. count inside dependency array ?
+-- useEffect( () => {
+
+}, [count]) 
+
+-> in this case, this useEffect will run everytime the statevar. value chagnes {i.e. count changes} , rather than only running once during mounting
+
+
 * setCount ( count){
     return count + 1;
 }
