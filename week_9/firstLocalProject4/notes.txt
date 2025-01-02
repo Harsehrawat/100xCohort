@@ -1,0 +1,14 @@
+* In this , i learnt fetching data from backend api (jsonplaceholder api) using useEffect
+
+* on every todo click , i tasked myself to return the title of the todo from back-end
+
+* method of fetching data using useEffect 
+-- useEffect ( () =>{
+    fetch("api")
+    .then( 
+        async res => {
+        const json = await res.json();
+        setTabData(json);  // here i updated state of current tabdata
+      }
+    )
+},[currentTab])
