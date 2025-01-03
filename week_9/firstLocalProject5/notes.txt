@@ -1,0 +1,8 @@
+In THis I learn about 2 ways we can pass childeren/props to the function
+
+for ex. Card is a function 
+-- so we can pass to card by 2 following ways : 
+    1. <Card children = { ' content '}/>
+    2. <Card> content </Card>
+
+-- also while accepting this children into card function use { content } as arguemnts of card function 
