@@ -1,0 +1,15 @@
+-- I can rather than function directly declare funtion as const var.
+ex. const Todo = ({ todos }) => {
+  return (
+    <div>
+      {todos.title} - {todos.status === "true" ? "Done" : "Pending"}
+    </div>
+  );
+};
+
+
+-- I can pass as many props or childs into component state  { ex. <Todo key={index} todos={currTodo} /> } but can wish to use only req. also {
+    ex. const Todo = ({ todos }) => {
+        
+    }
+} 
