@@ -10,6 +10,6 @@ ex. const Todo = ({ todos }) => {
 
 -- I can pass as many props or childs into component state  { ex. <Todo key={index} todos={currTodo} /> } but can wish to use only req. also {
     ex. const Todo = ({ todos }) => {
-        
+        // here pass your return code .
     }
 } 
