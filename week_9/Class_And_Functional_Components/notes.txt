@@ -1,0 +1,14 @@
+* DIfferences b/w Class and Functional component.
+
+--State Management:
+  Class Component: Uses the state object to manage state.
+  Functional Component: Uses the useState hook for state management.
+--Lifecycle Methods:
+  Class Component: Relies on lifecycle methods like componentDidMount, componentDidUpdate, and componentWillUnmount.
+  Functional Component: Handles lifecycle logic using hooks like useEffect.
+--Syntax and Boilerplate:
+  Class Component: Requires a render() method and the this keyword to access props and methods.
+  Functional Component: Directly returns JSX without needing a render() method or this keyword.
+--Performance:
+  Class Component: Slightly heavier due to the class overhead.
+  Functional Component: More lightweight and performs slightly better.
