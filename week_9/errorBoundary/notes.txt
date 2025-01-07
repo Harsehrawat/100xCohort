@@ -1,0 +1,1 @@
+Error boundary used incase a component is giving error so error boundary is used to limit the harm of error to the particular component and not to entire website/system 
