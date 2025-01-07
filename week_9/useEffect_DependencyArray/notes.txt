@@ -1,0 +1,10 @@
+-- useEffect w/out Dependency Array :
+* It runs once the component are mounting 
+* It will not run again unless the component unmounts and remounts
+* runs on unmount
+
+-- useEffect w/ Dependency Array : {ex. [count]}
+* It runs once during the component mounting 
+* It runs everytime the count state is changed
+* does'not run on unmounts
+* Useful for api fethcing where we have to return data on every change noticed .
