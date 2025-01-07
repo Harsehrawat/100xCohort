@@ -1,0 +1,17 @@
+* Library to install 
+-- npm install react-router-dom
+
+* import : BrowserRouter,Router,Routes
+
+* ways of navigating in SPA : 
+-- Link { <Link to = "/api" /> }
+-- Navigate ( useNavigate hook)
+
+* Structure of Code :
+<BrowserRouter>
+    <Router>
+        <Routes path="/api" element ={componentName}/>
+    </Router>
+</BrowserRouter>
+
+* use <Router path="*" to fetch all routes with non-declared path entered by the user 
