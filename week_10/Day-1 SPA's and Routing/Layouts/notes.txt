@@ -1,0 +1,9 @@
+Layout provides the structured way of implementing react code .
+--  <Route path="/" element={<Layout />}>  __ __ __ __ </Route>
+    { all the Route written inside this route would be children route for <Layout/>}
+
+* How to access the children routes set for <Layout/> ?
+-- function Layout(){
+    return <Outlet/>  
+    { writing <Outlet/> will ommit all the children present inside <Layout/> Route declared}
+}
