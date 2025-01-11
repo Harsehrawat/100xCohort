@@ -4,32 +4,31 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  return <div>
+    <LightBulb/> 
+  </div>  
+}
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+function LightBulb(){
+  const [bulbOn,setbulbOn] = useState(true);  // use it here as it's the LCA for the components used in this project.
+
+  return <div>
+    <BulbState bulbOn={bulbOn}/>
+    <ToggleBulb setbulbOn = {setbulbOn}/>
+  </div>
+}
+
+function BulbState( {bulbOn}){
+  return <div>
+    {bulbOn ?  "Bulb on" : "Bulb off"}
+  </div>
+}
+
+
+function ToggleBulb({setbulbOn}){
+  return <div>
+    <button onClick={ ()=>{ setbulbOn(c=>!c) }}>Toggle</button>
+  </div>
 }
 
 export default App
