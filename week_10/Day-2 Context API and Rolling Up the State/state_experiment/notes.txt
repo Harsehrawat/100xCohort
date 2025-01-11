@@ -1,0 +1,18 @@
+-- Props Drilling 
+* Occurs when u need to pass the data from higer level component down to lower level component that is several layers deep in the component tree .
+It often leads to issues like : COmplexity Incr. and Unreadabilty
+
+-- Way to avoid Props Drilling { use ContextAPI}
+* 1. Context : It serves as a container for the data you want to share .
+     ex. for whatsapp-> Context = [messages],
+        for linkedIn -> Context = [posts]
+
+    In example . in Context ,, store the values or props u wana pass down the component tree.
+
+* 2. Provider : this component wraps part of your application and provides the context value to all its descendents
+                {any component taht is child of this provider can access the context}
+
+* 3. Consume : How to consume from the Provider ? 
+            -> use useContext(Context_Name).
+            ex. const {bulbOn} = useContext(Context);
+            
