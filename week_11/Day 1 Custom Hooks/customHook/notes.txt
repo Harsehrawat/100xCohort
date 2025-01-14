@@ -1,0 +1,14 @@
+-- Syntax of component in react 
+* function counter(){
+    const[ val, setVal] = useState(0);
+    return val;
+}
+
+-- Syntax of CustomHook ?
+* Starts with prefix 'use' and allows us to reuse stateful logic in functional components
+
+    function useValue(){
+        const[ va,setVal] = useState(0);
+        return val;
+    }
+
