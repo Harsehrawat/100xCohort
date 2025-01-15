@@ -1,0 +1,42 @@
+-- what is debounce used for ?
+* while typing in amazon searchbar we keep getting suggestion as we keep typing words .
+    but suppose someone is typing really really fast so ideally in this case you won't be sending backend 
+    https req. to server for each word he wrote and asking for suggestion as it would be overload on system 
+    as well as the time u sent him suggesiton he would've types 3/4 words more.
+    For this case what we ideally do is we set a timer i.e. 20ms ; so if the typer doesn't type for this timer 
+    then only we send http backend req. otherwise we keep waiting for him to compelte typing first.
+
+-- how do we keep waiting till he is finished and send backend http after 20ms ?
+* using useDebounce hook .
+    S:1 Declaration -> const useDebounce = (inputVal, delay) => {
+
+    }
+    
+    S:2 Initialise state var.-> const useDebounce = (inputVal, delay) => {
+        const [debounce ,setdebounceVal] = useState(inputVal);
+
+        
+    }
+
+    S:3 Enter the return -> const useDebounce = (inputVal, delay) => {
+        const [debounce ,setdebounceVal] = useState(inputVal);
+
+        return debounce;        
+    }
+
+    S:4 Fill the useEffect -> const useDebounce = (inputVal, delay) => {
+        const [debounce ,setdebounceVal] = useState(inputVal);
+
+        useEffect( ()=>{
+            let currClock = setTimeOut( ()=>{
+                setdebounceVal(inputVal);
+            },delay );
+
+            return ()=>{
+                clearInterval(currClock);
+            }
+        },[inputVal,delay]);
+
+        return debounce;
+        
+    }
