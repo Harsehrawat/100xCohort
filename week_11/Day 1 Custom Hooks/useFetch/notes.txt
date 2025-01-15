@@ -1,0 +1,8 @@
+-- Using useFetch(url) is a generic hook where we pass the url to useFetch .
+-- Steps of fetching Data :
+   S:1-> set state var. 
+   S:2-> useEffect that runs on the dependency of changing var.
+   S:3-> in fetching funtion , first fetch data to a var. using fetch(url)
+                                second json the fetch data  
+                                third pass it to the state var. of useFetch
+    
