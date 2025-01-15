@@ -1,0 +1,19 @@
+-- Use of usePrev Hook ?
+* It is used to get the previous value of a var. {ex. prev. song we listened to }
+
+-- Explain about useRef hook used for const ref = useRef(); ?
+* useRef hook; this ref can be used to store a value and when the value is updated, it will not re-render the component.
+
+-- Structure ?
+* usePrev(value){
+    const ref = useRef();
+
+    useEffect( ()=>{
+        ref.current = value;
+    },[value]);
+
+    return ref.current
+}
+
+-- Traversing of compiler for this function ?
+* usePrev returns first , then the useEffect gets called . {this happens in this only}
