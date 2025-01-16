@@ -1,0 +1,34 @@
+-- How to do so when we have to json data from http request ?
+* Step : 1 -> we need to resolve the json data filling into the desiredAtom 
+              atom({
+                key : " ",
+                default : (selector({
+
+                }))
+              })
+             * we will use a selector as value for our atom in these cases.
+
+* Step : 2 -> calling async http req. 
+              atom({
+                key : " ",
+                default : (selector({
+                    key : " ",
+                    get : async()=>{
+                        const resp = await axios.get("http");
+                        return resp.data;
+                    }
+                }))
+              })
+
+
+-- How do we manage selector component , let's say i want Me section ot be sum of all jsonData
+* selector({
+    key : " ",
+    get : ({get})=>{
+        const allNotifications = get(ATOM_NAME);
+        return allNotifications.jobs +
+        allNotifications.network +
+        allNotifications.message +
+        allNotifications.notifications
+    }
+})
