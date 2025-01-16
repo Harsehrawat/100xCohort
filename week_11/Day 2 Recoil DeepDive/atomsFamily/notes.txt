@@ -1,0 +1,24 @@
+-- What is atomFamily and when to use ?
+* whenever we've array of several objects {i.e. varioud todos w/ diff. id in todo array}
+  in such cases we can't fetch each object of array by assiging all a atom each.
+  We use atomFamily 
+
+-- Structure of atomFamily ?
+* atomFamily({
+    key : " ",
+    default : (id)=>{ return todo.find(x=> x.id==id)};
+})
+
+-- What if we've todo from an api http req.
+* use selectorFamily() in default of atomFamily
+
+ atomFamily({
+    key : " ",
+    default : selectorFamily({
+        key : " ",
+        get : (id)=>async ({get})=>{ 
+            const resp = await axios.get("http"+ id),
+            return resp.data
+         }
+    })
+})
