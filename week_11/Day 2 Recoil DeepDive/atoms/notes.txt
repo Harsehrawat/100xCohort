@@ -1,0 +1,17 @@
+Atom : think of atom just like useState only just it's the recoil way to do it and are more optimal 
+
+-- Structure of atom :
+* atom({
+    key : " ",
+    default : num or "stirng"
+})
+
+-- Remember atoms use RecoilHooks and any component taht uses recoil hook needs to be wrapped inside recoil root
+
+-- Types of RecoilHooks ?
+* 1. useRecoilValue  (to grab value)
+  2. useRecoilState   ( to grab value as well as fetch setAtomState)
+  3. useSetRecoilState (to update state of atom w/out grabbing value)
+
+
+  -- Selectors : a selector is something that is derived from other atoms 
