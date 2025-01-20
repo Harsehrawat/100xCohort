@@ -1,0 +1,24 @@
+Things to know in FE Framework :
+flex , grid , responsiveness and bgColor,hover .
+
+-- Grid ex. 
+<div className="grid-cols-12">
+    <div className="col-span-7">Hi</div>
+    <div className="col-span-5>There</div>
+</div>
+: This way i delcared a grid of 12cols and i decided to give hi div 5cols and there div 7cols 
+
+
+-- responsiveness : We can apply styles to diff screensizes bason on responsive breakpoints.
+                     sm : 640px 
+                     md : 768px
+                     lg : 1024px
+                     xl : 1280px
+                     2xl: 1536px
+
+    * In responsiveness .. if i've set for ex. <div className= "md:bg-blue bg-pink"/> 
+                           then pink colour will appear if the ss if less than 768px. 
+                           but the moment it reaches md size bg colour would be blue .
+                           The catch here is since nothing else is delcared so if even 
+                           i put it on TV screensize -> the bg colour would be still blue.
+
