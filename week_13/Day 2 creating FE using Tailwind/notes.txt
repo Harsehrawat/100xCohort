@@ -1,0 +1,5 @@
+-- How to move any div manually left/right or up/down ?
+* translate-y-{value}
+
+-- grid grid-cols-{value} is used to declare a grid layout of {value} cols 
+-- col-span-{value} is used when defining no of col a part. div/component of the grid will take
