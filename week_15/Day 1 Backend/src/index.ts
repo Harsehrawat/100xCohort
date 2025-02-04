@@ -3,8 +3,11 @@ import mongoose  from "mongoose";
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt";
 import { UserModel } from "./db";
-import { z } from "zod";
+import { string, z } from "zod";
 import { Request, Response } from "express";
+import { userMiddleWare } from "./middleware";
+
+const JWT_SECRET_KEY = "randomilovekiara";
 
 const app = express();
 app.use(express.json());
@@ -51,13 +54,33 @@ app.post("/api/signup", async (req: Request, res: Response): Promise<any> => {
   });
   
 
-app.post("/api/signin" , (req,res)=>{
+  app.post("/api/signin", async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { username, password } = req.body;
 
-} );
+        const user = await UserModel.findOne({ username });
+        if (!user || !user.password || !password) {
+            return res.status(403).json({ message: user ? "Enter password" : "No such user found" });
+        }
 
-app.post("/api/post/content", (req,res)=>{
+        if (!(await bcrypt.compare(password, user.password))) {
+            return res.status(403).json({ message: "Wrong password" });
+        }
+
+        const token = jwt.sign({ id: user._id.toString() }, JWT_SECRET_KEY);
+        return res.status(200).json({ message: "Signed in successfully!", token });
+        
+    } catch (error) {
+        console.error("Server Error:", error);
+        return res.status(500).json({ message: "Server error" });
+    }
+});
+
+
+app.post("/api/post/content", userMiddleWare, (req: Request, res: Response) => {
 
 });
+
 
 app.get("/api/get/content", (req,res)=>{
 

@@ -13,9 +13,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const db_1 = require("./db");
 const zod_1 = require("zod");
+const JWT_SECRET_KEY = "randomilovekiara";
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 // Zod schema for validation
@@ -55,39 +57,24 @@ app.post("/api/signup", (req, res) => __awaiter(void 0, void 0, void 0, function
         });
     }
 }));
-// app.post("/api/signup", async (req ,res)=>{
-//     try{
-//         const {username , password} = signUpSchema.parse(req.body);
-//         // validate if userexists
-//         const ifUserExists = await UserModel.findOne({
-//             username
-//         });
-//         if(ifUserExists) res.status(403).json({
-//             message : "username already taken"
-//         })
-//         // pass to DB if unique user
-//         const hashedPass = await bcrypt.hash(password,5);
-//         UserModel.create({ 
-//             username , 
-//             password : hashedPass
-//         });
-//         res.status(200).json({
-//             message : "SignUp successfull"
-//         })
-//     }catch(error){
-//         if(error instanceof z.ZodError){
-//             res.status(411).json({
-//                 message : "invalid Input"
-//             })
-//         }
-//         console.log("server error ", error);
-//         res.status(500).json({
-//             message : "server error"
-//         })
-//     }
-// });
-app.post("/api/signin", (req, res) => {
-});
+app.post("/api/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { username, password } = req.body;
+        const user = yield db_1.UserModel.findOne({ username });
+        if (!user || !user.password || !password) {
+            return res.status(403).json({ message: user ? "Enter password" : "No such user found" });
+        }
+        if (!(yield bcrypt_1.default.compare(password, user.password))) {
+            return res.status(403).json({ message: "Wrong password" });
+        }
+        const token = jsonwebtoken_1.default.sign({ id: user._id.toString() }, JWT_SECRET_KEY);
+        return res.status(200).json({ message: "Signed in successfully!", token });
+    }
+    catch (error) {
+        console.error("Server Error:", error);
+        return res.status(500).json({ message: "Server error" });
+    }
+}));
 app.post("/api/post/content", (req, res) => {
 });
 app.get("/api/get/content", (req, res) => {
