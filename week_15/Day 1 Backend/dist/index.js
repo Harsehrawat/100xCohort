@@ -16,10 +16,15 @@ const express_1 = __importDefault(require("express"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const db_1 = require("./db");
+const db_2 = require("./db");
 const zod_1 = require("zod");
-const JWT_SECRET_KEY = "randomilovekiara";
+// import { userMiddleware } from "./middleware";
+const config_1 = require("./config");
+const cors_1 = __importDefault(require("cors"));
+const middleware_1 = require("./middleware");
 const app = (0, express_1.default)();
-app.use(express_1.default.json());
+app.use(express_1.default.json()); // Middleware to parse JSON request bodies.
+app.use((0, cors_1.default)()); // Middleware to allow cross-origin requests.
 // Zod schema for validation
 const signUpSchema = zod_1.z.object({
     username: zod_1.z.string().min(3).max(10),
@@ -58,27 +63,58 @@ app.post("/api/signup", (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 }));
 app.post("/api/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { username, password } = req.body;
     try {
-        const { username, password } = req.body;
-        const user = yield db_1.UserModel.findOne({ username });
-        if (!user || !user.password || !password) {
-            return res.status(403).json({ message: user ? "Enter password" : "No such user found" });
+        // Ensure that verifyUsername is of type IUser
+        const verifyUsername = yield db_1.UserModel.findOne({ username });
+        // If user exists
+        if (verifyUsername) {
+            // Compare the provided password with the stored hashed password
+            const verifyPass = yield bcrypt_1.default.compare(password, verifyUsername.password);
+            // If passwords match, generate a JWT token and send it back
+            if (verifyPass) {
+                const token = jsonwebtoken_1.default.sign({ id: verifyUsername._id }, config_1.JWT_SECRET_KEY);
+                res.status(200).json({ token });
+            }
+            else {
+                res.status(403).json({ message: "Incorrect password" });
+            }
         }
-        if (!(yield bcrypt_1.default.compare(password, user.password))) {
-            return res.status(403).json({ message: "Wrong password" });
+        else {
+            res.status(403).json({ message: "Username not found" });
         }
-        const token = jsonwebtoken_1.default.sign({ id: user._id.toString() }, JWT_SECRET_KEY);
-        return res.status(200).json({ message: "Signed in successfully!", token });
     }
     catch (error) {
-        console.error("Server Error:", error);
-        return res.status(500).json({ message: "Server error" });
+        console.log("Server error:", error);
+        res.status(500).json({ message: "Internal server error" });
     }
 }));
-app.post("/api/post/content", (req, res) => {
-});
-app.get("/api/get/content", (req, res) => {
-});
+app.post("/api/content", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { title, link } = req.body;
+    yield db_2.ContentModel.create({
+        title,
+        link,
+        userId: req.userId,
+        tags: [],
+    });
+    res.status(200).json({ message: "Content Added!" });
+}));
+app.get("/api/content", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = req.userId;
+    // from contentModel return content w/ this userId
+    try {
+        const resp = yield db_2.ContentModel.find({ userId: userId }).populate("userId", "username");
+        if (resp.length != 0) {
+            res.status(200).json({ resp });
+        }
+        else {
+            res.status(404).json({ message: "you have added nothing yet" });
+        }
+    }
+    catch (e) {
+        console.log("server error " + e);
+    }
+}));
 app.delete("/api/delete/content", (req, res) => {
 });
 app.listen(3000);

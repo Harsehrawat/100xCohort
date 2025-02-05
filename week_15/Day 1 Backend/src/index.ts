@@ -3,14 +3,19 @@ import mongoose  from "mongoose";
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt";
 import { UserModel } from "./db";
+import {ContentModel} from "./db";
 import { string, z } from "zod";
 import { Request, Response } from "express";
-import { userMiddleWare } from "./middleware";
+// import { userMiddleware } from "./middleware";
+import { JWT_SECRET_KEY } from "./config";
+import cors from "cors";
+import { userMiddleware } from "./middleware";
 
-const JWT_SECRET_KEY = "randomilovekiara";
+
 
 const app = express();
-app.use(express.json());
+app.use(express.json()); // Middleware to parse JSON request bodies.
+app.use(cors()); // Middleware to allow cross-origin requests.
 
 // Zod schema for validation
 const signUpSchema = z.object({
@@ -54,40 +59,80 @@ app.post("/api/signup", async (req: Request, res: Response): Promise<any> => {
   });
   
 
-  app.post("/api/signin", async (req: Request, res: Response): Promise<any> => {
+  app.post("/api/signin", async (req, res) => {
+    const { username, password } = req.body;
+
     try {
-        const { username, password } = req.body;
+        // Ensure that verifyUsername is of type IUser
+        const verifyUsername = await UserModel.findOne({ username });
 
-        const user = await UserModel.findOne({ username });
-        if (!user || !user.password || !password) {
-            return res.status(403).json({ message: user ? "Enter password" : "No such user found" });
+        // If user exists
+        if (verifyUsername) {
+            // Compare the provided password with the stored hashed password
+            const verifyPass = await bcrypt.compare(password, verifyUsername.password);
+
+            // If passwords match, generate a JWT token and send it back
+            if (verifyPass) { 
+                const token = jwt.sign({ id: verifyUsername._id }, JWT_SECRET_KEY);
+                res.status(200).json({ token });
+            } else {
+                res.status(403).json({ message: "Incorrect password" });
+            }
+        } else {
+            res.status(403).json({ message: "Username not found" });
         }
-
-        if (!(await bcrypt.compare(password, user.password))) {
-            return res.status(403).json({ message: "Wrong password" });
-        }
-
-        const token = jwt.sign({ id: user._id.toString() }, JWT_SECRET_KEY);
-        return res.status(200).json({ message: "Signed in successfully!", token });
-        
     } catch (error) {
-        console.error("Server Error:", error);
-        return res.status(500).json({ message: "Server error" });
+        console.log("Server error:", error);
+        res.status(500).json({ message: "Internal server error" });
     }
 });
 
+    
 
-app.post("/api/post/content", userMiddleWare, (req: Request, res: Response) => {
+app.post("/api/content",userMiddleware ,async (req, res)=>{
+    const {title , link} = req.body;
+    await ContentModel.create({
+        title,
+        link,
+        userId : req.userId,
+        tags : [],
+    })
 
+    res.status(200).json({ message : "Content Added!"});
+})
+
+
+app.get("/api/content",userMiddleware, async (req,res)=>{
+    const userId = req.userId;
+    // from contentModel return content w/ this userId
+    try{
+        const resp = await ContentModel.find({ userId : userId}).populate("userId","username");
+        if(resp.length !=0){
+            res.status(200).json({ resp });
+        }
+        else{
+            res.status(404).json({ message : "you have added nothing yet"});
+        }
+    }
+    catch(e){
+        console.log("server error "+e);
+    }
 });
 
-
-app.get("/api/get/content", (req,res)=>{
-
-});
-
-app.delete("/api/delete/content", (req,res)=>{
-
+app.delete("/api/delete/content", userMiddleware,async (req,res)=>{
+    const contentId = req.body.contentId;
+    // find and return 
+    try{
+        await ContentModel.deleteMany({
+            contentId,
+            userId : req.userId
+        })
+        res.status(200).json({message : "deleted successfully"});
+        
+    }
+    catch(e){
+        console.log("server eror in content delete"+e);
+    }
 });
 
 
