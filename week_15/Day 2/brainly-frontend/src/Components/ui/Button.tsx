@@ -1,0 +1,30 @@
+import { ReactElement } from "react";
+import './../../index.css'
+
+interface ButtonProps {
+    variant : "primary" | "secondary";
+    size : "sm" | "md" | "lg";
+    text : string;
+    startIcon : any;
+    endIcon : any;
+    onClick? : ()=> void
+}
+
+const variantStyle = {
+    "primary" : "bg-purple-600 text-white",
+    "secondary" : "bg-purple-200 text-purple-500"
+}
+
+const defaultStyle = " flex items-center gap-2 rounded-md al pr-3 pl-3 cursor-pointer" ;
+
+const sizeStyle = {
+    "sm" : "py-1 px-2",
+    "md" : "py-1 px-3",
+    "lg" : "py-2 px-4"
+}
+
+export const Button =(props : ButtonProps)=>{
+
+    return <button onClick={props.onClick} className={`${variantStyle[props.variant]} ${defaultStyle} ${sizeStyle[props.size]}`}> {props.startIcon} {props.text} {props.endIcon}</button>
+}
+
