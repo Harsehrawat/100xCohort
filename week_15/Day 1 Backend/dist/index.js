@@ -33,7 +33,7 @@ const signUpSchema = zod_1.z.object({
         .min(3)
         .max(20)
         .regex(/^[a-z0-9_.]+$/, "Username can only contain lowercase letters, numbers, and _ , ."),
-    password: zod_1.z.string().min(7).max(15).regex(/[A-Z]/).regex(/[a-z]/).regex(/[0-9]/).regex(/[@,?,!,$,%,&,*]/)
+    password: zod_1.z.string().min(5).max(15).regex(/^[a-zA-Z0-9@_.$]+$/)
 });
 app.post("/api/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
