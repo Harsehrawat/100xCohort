@@ -8,6 +8,7 @@ interface ButtonProps {
     startIcon : any;
     endIcon : any;
     onClick? : ()=> void
+    italic? : boolean
 }
 
 const variantStyle = {
@@ -25,6 +26,14 @@ const sizeStyle = {
 
 export const Button =(props : ButtonProps)=>{
 
-    return <button onClick={props.onClick} className={`${variantStyle[props.variant]} ${defaultStyle} ${sizeStyle[props.size]}`}> {props.startIcon} {props.text} {props.endIcon}</button>
+    return (
+        <button 
+          onClick={props.onClick} 
+          className={`p-1 cursor-pointer ${variantStyle[props.variant]} ${defaultStyle} ${sizeStyle[props.size]} ${props.italic? "italic" : ""}`}
+        >
+          {props.startIcon} {props.text} {props.endIcon}
+        </button>
+      );
+      
 }
 
