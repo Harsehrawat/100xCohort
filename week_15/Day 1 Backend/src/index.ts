@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt";
 import { UserModel } from "./db";
 import {ContentModel} from "./db";
+import { LinkModel } from "./db";
+import { random } from "./utils";
 import { string, z } from "zod";
 import { Request, Response } from "express";
 // import { userMiddleware } from "./middleware";
@@ -19,7 +21,11 @@ app.use(cors()); // Middleware to allow cross-origin requests.
 
 // Zod schema for validation
 const signUpSchema = z.object({
-    username : z.string().min(3).max(10),
+    username : z.string()
+    .min(3)
+    .max(20)
+    .regex(/^[a-z0-9_.]+$/, "Username can only contain lowercase letters, numbers, and _ , ."),
+  
     password : z.string().min(7).max(15).regex(/[A-Z]/).regex(/[a-z]/).regex(/[0-9]/).regex(/[@,?,!,$,%,&,*]/)
 });
 
@@ -91,14 +97,18 @@ app.post("/api/signup", async (req: Request, res: Response): Promise<any> => {
 
 app.post("/api/content",userMiddleware ,async (req, res)=>{
     const {title , link} = req.body;
-    await ContentModel.create({
+    if(title==null){
+      res.status(400).json({message : "can't submit null entry"});
+    }
+    else{
+      await ContentModel.create({
         title,
         link,
         userId : req.userId,
         tags : [],
-    })
-
-    res.status(200).json({ message : "Content Added!"});
+      })
+      res.status(200).json({ message : "Content Added!"});
+    }
 })
 
 
@@ -134,6 +144,53 @@ app.delete("/api/delete/content", userMiddleware,async (req,res)=>{
         console.log("server eror in content delete"+e);
     }
 });
+
+app.post("/api/share/content",userMiddleware , async (req,res)=>{
+    const share = req.body.share;
+    try{
+      if(share){
+        const existingLink = LinkModel.findOne({ userId : req.userId});
+        if(!existingLink){
+          // create new and return
+          const hash = random(10);
+          await LinkModel.create({ userId : req.userId , hash});
+          res.status(200).json({ message : `/api/share/${hash}`});
+        }else{
+          // delete existing link and return new to user and db
+          await LinkModel.deleteOne({ userId : req.userId});
+          const hash = random(10);
+          await LinkModel.create({ userId : req.userId ,hash});
+          res.status(200).json({ message : `/api/share/${hash}`});
+        }
+      }else{
+        await LinkModel.deleteOne({ userId : req.userId});
+        res.status(200).json({ message : "link deleted"});
+      }      
+    }catch(e){
+      console.log("error in /api/share/content :"+ e);
+      res.status(403).json({message : "server error"});
+    }
+});
+
+app.get("/api/share/:sharableLink", async (req,res)=>{
+    const hash = req.params.sharableLink;
+    // verify hash is associated w/ LinkModel
+    const link = await LinkModel.findOne({ hash });
+    if(!link){
+      res.status(411).json({ message : "invalid link / no such link exists"});
+      return;
+    }
+    // if such link found , return content and username
+    const content = await ContentModel.find({ userId : link.userId});
+    if(!content){
+      res.status(404).json({message : "empty link / no content added by user associated w/ this link"});
+    }
+    // if content found , return content and username
+    const user = await UserModel.findOne({ userId : link.userId});
+
+    res.status(200).json({ username : user?.username , content});
+
+})
 
 
 app.listen(3000);
