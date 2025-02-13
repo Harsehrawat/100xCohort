@@ -6,30 +6,31 @@ import { BACKEND_URL } from "../config";
 import { data } from "react-router-dom";
 
 export function Signup(){
-    const usernameref = useRef<HTMLInputElement>(null);
-    const passwordref = useRef<HTMLInputElement>(null);
-    console.log("inside signUp fn")
-    
+    const usernameRef = useRef<HTMLInputElement>();
+    const passwordRef = useRef<HTMLInputElement>();
+
     async function signupHandler(){
-        console.log("signUpHandler called")
-        const username = usernameref.current?.value;
-        const password = passwordref.current?.value;
-        await axios.post(`${BACKEND_URL}/api/signup`,{
-            data : {
-                username ,
-                password 
-            }
-        })
-        console.log("passed data")
+        const username = usernameRef.current?.value;
+        const password = passwordRef.current?.value;
+
+        try{
+            const response = await axios.post(`${BACKEND_URL}/api/signup`,{ username , password});
+            if(response.status === 200) return alert(`${response.data.message} , you can now login to your account`);
+            else if(response.status === 403) return alert(`${response.data.message}`);
+        }catch(e: any){
+            alert(`${e.response?.data?.message}` || "signup failed");
+        }
         
     }
+        
 
     return <div className="h-100 w-full flex justify-center items-center">
         <div className="bg-white rounded-md text-black border p-2">
-            <Input ref={usernameref} placeholder="username"/>
-            <Input ref={passwordref} placeholder="password"/>
+            Create Account for free
+            <Input ref={usernameRef} placeholder="username"/>
+            <Input ref={passwordRef} placeholder="password "/>
             <div  className="flex justify-center">
-                <Button onClick={signupHandler} variant="primary" text="sign up" italic/>
+                <Button onClick={signupHandler} variant="primary" text="create" italic/>
             </div>
         </div>
 

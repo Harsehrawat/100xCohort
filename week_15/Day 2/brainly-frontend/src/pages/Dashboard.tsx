@@ -24,9 +24,10 @@ export function Dashboard() {
     }} variant='primary' text='Add Content' size='sm' startIcon={<PlusIcon/>} endIcon={""} />
     <Button variant='secondary' text='Share' size='md' startIcon={<ShareIcon/>} endIcon={""}/>
     </div>
-    <div className='flex gap-2 p-8'>
+    <div className='flex flex-wrap gap-2 p-8'>
     <Card title='inspire' type='tweet' link='https://x.com/harsehrawatPC/status/1801921427815186856'/>
     <Card title='inspire' type='youtube' link='https://www.youtube.com/watch?v=ND0UeXeHB4A'/>
+
     {/* <Card title='inspire' type='instagram' link='https://www.instagram.com/p/DEfuKoWTlRk/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=='/> */}
     </div>
   </div>
