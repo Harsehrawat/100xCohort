@@ -13,22 +13,22 @@ import { CreateContentModal } from '../Components/ui/CreateContentModal'
 export function Dashboard() {
   const [modalOpen,setModalOpen] = useState(false);
 
-  return <div className='h-screen w-full'>
-   <div className=''>
+  return <div className='bg-slate-300 h-full w-screen'>
+   <div className=' '>
     <CreateContentModal open={modalOpen} onClose={()=>{
       setModalOpen(false);
     }}/>
-    <div className='flex justify-end gap-2 '>
+    <div className='flex justify-end gap-2 p-3 '>
     <Button onClick={ ()=>{
       setModalOpen(true);
     }} variant='primary' text='Add Content' size='sm' startIcon={<PlusIcon/>} endIcon={""} />
-    <Button variant='secondary' text='Share' size='md' startIcon={<ShareIcon/>} endIcon={""}/>
+    <Button variant='secondary' text='Share Dashboard' size='sm' startIcon={<ShareIcon/>} endIcon={""}/>
     </div>
-    <div className='flex flex-wrap gap-2 p-8'>
-    <Card title='inspire' type='tweet' link='https://x.com/harsehrawatPC/status/1801921427815186856'/>
-    <Card title='inspire' type='youtube' link='https://www.youtube.com/watch?v=ND0UeXeHB4A'/>
+    <div className='flex flex-wrap gap-2 mx-4 p-4 border-3 border-dashed border-white'>
+    <Card title='inspire' type='Tweet' link='https://x.com/harsehrawatPC/status/1751321640070471761'/>
+    <Card title='inspire' type='Youtube' link='https://www.youtube.com/watch?v=ND0UeXeHB4A'/>
+    <Card title='leetcode' type='Document' link='https://leetcode.com/u/harsehrawat/'/>
 
-    {/* <Card title='inspire' type='instagram' link='https://www.instagram.com/p/DEfuKoWTlRk/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=='/> */}
     </div>
   </div>
   </div>

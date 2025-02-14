@@ -16,7 +16,7 @@ export function Card({title , type , link} : CardInterface){
         <div className="flex justify-between items-center m-2">
             <div className="flex items-center text-xl font-semibold  font-stretch-condensed text-black">
                 <div className="text-gray-500 pr-6">
-                    {type === "youtube" ? <YTICON /> : type === "tweet" ? <TwitterIcon /> : <DocumentIcon />}
+                    {type === "Youtube" ? <YTICON /> : type === "Tweet" ? <TwitterIcon /> : <DocumentIcon />}
 
                 </div>
                 {title}
@@ -31,14 +31,16 @@ export function Card({title , type , link} : CardInterface){
             </div>
             
         </div>
-        <div className="mt-4 mb-2 ml-2 mr-2 ">
-            {type === "youtube" && <iframe className="w-full h-full" src={link.replace("watch", "embed").replace("?v=","/")} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>}
-            {type === "tweet" && <blockquote className="twitter-tweet">
+        <div className="mt-4 mb-2 ml-2 mr-2 h-fit">
+            {type === "Youtube" && <iframe className="w-full h-full" src={link.replace("watch", "embed").replace("?v=","/")} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>}
+            {type === "Tweet" && <blockquote className="twitter-tweet">
             <a href={link.replace("x.com","twitter.com")}></a> 
             </blockquote>}
-            {/* {type==="instagram" && <blockquote className="instagram-media">
-            <a href={link}></a>
-            </blockquote>} */}
+            {type === "Document" && <p className="text-blue-500 underline underline-offset-2">
+                <a href={link} target="_blank" rel="noopener noreferrer">
+                    {link}
+                </a>
+            </p>}
             
         
         </div>

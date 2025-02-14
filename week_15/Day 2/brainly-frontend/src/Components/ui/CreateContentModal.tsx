@@ -4,6 +4,10 @@ import { Input } from "./Input";
 
 // CreateContentModal component definition
 export function CreateContentModal({ open, onClose }) {
+
+    function addContentHandler(){
+
+    }
    
     return (
         <div>
@@ -11,9 +15,8 @@ export function CreateContentModal({ open, onClose }) {
                 // Modal background overlay
                 <div>
                     <div className="w-screen h-screen bg-black-700 backdrop-blur-md fixed top-0 left-0  flex justify-center"></div>
-                    {/* Modal content container */}
                     <div className="w-screen h-screen fixed  top-0 left-0 flex justify-center">
-                        <div className="flex flex-col justify-center">
+                        <div className="flex flex-col justify-center ">
                             <span className="bg-slate-500/30 border backdrop-blur-lg  text-black justiy-end rounded p-2 ">
                                 <span className="flex justify-end cursor-pointer" onClick={()=>{onClose(false)}}>
                                     <CloseIcon/>
@@ -21,9 +24,15 @@ export function CreateContentModal({ open, onClose }) {
                                 <div>
                                     <Input placeholder="title"/>
                                     <Input placeholder="link"/>
+                                    <select className="p-2 w-55 m-3 ml-4 border rounded text-slate-600 cursor-pointer">
+                                        <option value="" disabled selected>Select Type</option>
+                                        <option value="youtube">YouTube</option>
+                                        <option value="tweet">Tweet</option>
+                                        <option value="document">Document</option>
+                                    </select>
                                 </div>
                                 <div className="flex justify-center">
-                                    <Button variant="primary" text="submit"/>
+                                    <Button onClick={addContentHandler} variant="primary" text="submit"/>
                                 </div>
                             </span>
                             

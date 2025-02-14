@@ -12,11 +12,11 @@ interface ButtonProps {
 }
 
 const variantStyle = {
-    "primary" : "bg-purple-600 text-white",
-    "secondary" : "bg-purple-200 text-purple-500"
+    "primary" : "bg-purple-600 text-white hover:bg-purple-700",
+    "secondary" : "bg-purple-200 text-purple-500 hover:bg-purple-300"
 }
 
-const defaultStyle = " flex items-center gap-2 rounded-md al pr-3 pl-3 cursor-pointer" ;
+const defaultStyle = " flex items-center gap-2 rounded-md pr-2 pl-2 cursor-pointer text-xs" ;
 
 const sizeStyle = {
     "sm" : "py-1 px-2",
