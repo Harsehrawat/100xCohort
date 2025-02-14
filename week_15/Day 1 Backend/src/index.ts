@@ -80,7 +80,7 @@ app.post("/api/signup", async (req: Request, res: Response): Promise<any> => {
             // If passwords match, generate a JWT token and send it back
             if (verifyPass) { 
                 const token = jwt.sign({ id: verifyUsername._id }, JWT_SECRET_KEY);
-                res.status(200).json({ token });
+                res.status(200).json({ token,message : "Login Successfull" });
             } else {
                 res.status(403).json({ message: "Incorrect password" });
             }

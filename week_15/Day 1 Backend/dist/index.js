@@ -79,7 +79,7 @@ app.post("/api/signin", (req, res) => __awaiter(void 0, void 0, void 0, function
             // If passwords match, generate a JWT token and send it back
             if (verifyPass) {
                 const token = jsonwebtoken_1.default.sign({ id: verifyUsername._id }, config_1.JWT_SECRET_KEY);
-                res.status(200).json({ token });
+                res.status(200).json({ token, message: "Login Successfull" });
             }
             else {
                 res.status(403).json({ message: "Incorrect password" });
