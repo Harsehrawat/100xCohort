@@ -70,13 +70,12 @@ app.post("/api/signup", (req, res) => __awaiter(void 0, void 0, void 0, function
 app.post("/api/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password } = req.body;
     try {
-        // Ensure that verifyUsername is of type IUser
         const verifyUsername = yield db_1.UserModel.findOne({ username });
         // If user exists
         if (verifyUsername) {
             // Compare the provided password with the stored hashed password
             const verifyPass = yield bcrypt_1.default.compare(password, verifyUsername.password);
-            // If passwords match, generate a JWT token and send it back
+            // If passwords match,generate a JWT token and send it back
             if (verifyPass) {
                 const token = jsonwebtoken_1.default.sign({ id: verifyUsername._id }, config_1.JWT_SECRET_KEY);
                 res.status(200).json({ token, message: "Login Successfull" });
@@ -95,30 +94,40 @@ app.post("/api/signin", (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 }));
 app.post("/api/content", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { title, link } = req.body;
-    if (title == null) {
-        res.status(400).json({ message: "can't submit null entry" });
+    const { title, link, type } = req.body;
+    try {
+        if (title == null || link === null || type === null) {
+            res.status(400).json({ message: "can't submit null entry" });
+        }
+        else {
+            yield db_2.ContentModel.create({
+                title,
+                link,
+                type,
+                userId: req.userId,
+                tags: [],
+            });
+            res.status(200).json({ message: "Content Added!" });
+        }
     }
-    else {
-        yield db_2.ContentModel.create({
-            title,
-            link,
-            userId: req.userId,
-            tags: [],
-        });
-        res.status(200).json({ message: "Content Added!" });
+    catch (e) {
+        console.log("server error in app.post(/api/content)" + e);
+        res.status(500).json({ message: "server error" });
     }
 }));
 app.get("/api/content", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req.userId;
     // from contentModel return content w/ this userId
     try {
-        const resp = yield db_2.ContentModel.find({ userId: userId }).populate("userId", "username");
-        if (resp.length != 0) {
-            res.status(200).json({ resp });
+        // fetch username to always display regardless if any content added or not
+        const user = yield db_1.UserModel.findOne({ _id: userId }).select("username");
+        console.log(`username received by BE:${user === null || user === void 0 ? void 0 : user.username}`);
+        const content = yield db_2.ContentModel.find({ userId: userId }).populate("userId", "username");
+        if (content.length != 0) {
+            res.status(200).json({ content, username: user === null || user === void 0 ? void 0 : user.username });
         }
         else {
-            res.status(404).json({ message: "you have added nothing yet" });
+            res.status(200).json({ message: "you have added nothing yet", username: user === null || user === void 0 ? void 0 : user.username });
         }
     }
     catch (e) {
