@@ -33,7 +33,7 @@ export function Card({title , type , link} : CardInterface){
         </div>
         <div className="mt-4 mb-2 ml-2 mr-2 h-fit">
             {type === "Youtube" && <iframe className="w-full h-full" src={link.replace("watch", "embed").replace("?v=","/")} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>}
-            {type === "Tweet" && <blockquote className="twitter-tweet">
+            {type === "Tweet" && <blockquote className="twitter-tweet h-30">
             <a href={link.replace("x.com","twitter.com")}></a> 
             </blockquote>}
             {type === "Document" && <p className="text-blue-500 underline underline-offset-2">
