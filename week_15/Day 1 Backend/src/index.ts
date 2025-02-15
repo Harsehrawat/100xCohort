@@ -69,7 +69,6 @@ app.post("/api/signup", async (req: Request, res: Response): Promise<any> => {
     const { username, password } = req.body;
 
     try {
-        // Ensure that verifyUsername is of type IUser
         const verifyUsername = await UserModel.findOne({ username });
 
         // If user exists
@@ -77,7 +76,7 @@ app.post("/api/signup", async (req: Request, res: Response): Promise<any> => {
             // Compare the provided password with the stored hashed password
             const verifyPass = await bcrypt.compare(password, verifyUsername.password);
 
-            // If passwords match, generate a JWT token and send it back
+            // If passwords match,generate a JWT token and send it back
             if (verifyPass) { 
                 const token = jwt.sign({ id: verifyUsername._id }, JWT_SECRET_KEY);
                 res.status(200).json({ token,message : "Login Successfull" });
@@ -96,19 +95,26 @@ app.post("/api/signup", async (req: Request, res: Response): Promise<any> => {
     
 
 app.post("/api/content",userMiddleware ,async (req, res)=>{
-    const {title , link} = req.body;
-    if(title==null){
-      res.status(400).json({message : "can't submit null entry"});
+    const {title , link, type} = req.body;
+    try{
+      if(title==null || link===null || type===null){
+        res.status(400).json({message : "can't submit null entry"});
+      }
+      else{
+        await ContentModel.create({
+          title,
+          link,
+          type,
+          userId : req.userId,
+          tags : [],
+        })
+        res.status(200).json({ message : "Content Added!"});
+      }
+    }catch(e){
+      console.log("server error in app.post(/api/content)"+e);
+      res.status(500).json({message : "server error"});
     }
-    else{
-      await ContentModel.create({
-        title,
-        link,
-        userId : req.userId,
-        tags : [],
-      })
-      res.status(200).json({ message : "Content Added!"});
-    }
+    
 })
 
 
@@ -116,12 +122,15 @@ app.get("/api/content",userMiddleware, async (req,res)=>{
     const userId = req.userId;
     // from contentModel return content w/ this userId
     try{
-        const resp = await ContentModel.find({ userId : userId}).populate("userId","username");
-        if(resp.length !=0){
-            res.status(200).json({ resp });
+        // fetch username to always display regardless if any content added or not
+        const user = await UserModel.findOne({ _id : userId}).select("username");
+        console.log(`username received by BE:${user?.username}`);
+        const content = await ContentModel.find({ userId : userId}).populate("userId","username");
+        if(content.length !=0){
+            res.status(200).json({ content ,username : user?.username});
         }
         else{
-            res.status(404).json({ message : "you have added nothing yet"});
+            res.status(200).json({ message : "you have added nothing yet" , username : user?.username});
         }
     }
     catch(e){
