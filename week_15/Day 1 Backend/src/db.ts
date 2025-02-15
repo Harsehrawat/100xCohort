@@ -17,6 +17,7 @@ const UserSchema = new Schema<IUser>({
 const ContentSchema = new Schema({
     title : String,
     link : String,
+    type : String,
     tags : [{ 
         type: mongoose.Types.ObjectId,
         ref : 'user'
