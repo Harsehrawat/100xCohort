@@ -26,9 +26,12 @@ export function CreateContentModal({ open, onClose }) {
         const response = await axios.post(`${BACKEND_URL}/api/content`, { title , link , type},{ headers : {Authorization : token}});
 
         try{
+            
             if(response.status === 200){
                 alert(`${response.data.message}`);
                 navigate("/dashboard");
+                onClose(false);
+                
             }
             else if(response.status===401 || response.status===500 || response.status===400) alert(`${response.data.message}`);
           
@@ -45,12 +48,13 @@ export function CreateContentModal({ open, onClose }) {
             {open && (
                 // Modal background overlay
                 <div>
-                    <div className="w-screen h-screen bg-black-700 backdrop-blur-md fixed top-0 left-0  flex justify-center"></div>
+                    <div className="w-screen h-screen backdrop-blur-md bg-gray-700/30 fixed top-0 left-0  flex justify-center"></div>
                     <div className="w-screen h-screen fixed  top-0 left-0 flex justify-center">
                         <div className="flex flex-col justify-center ">
-                            <span className="bg-slate-500/30 border backdrop-blur-lg  text-black justiy-end rounded p-2 ">
-                                <span className="flex justify-end cursor-pointer" onClick={()=>{onClose(false)}}>
-                                    <CloseIcon/>
+                            <span className=" border bg-slate-500/10 backdrop-blur-sm text-black justify-end rounded p-2 ">
+                                <span className="flex justify-end">
+                                <Button onClick={()=>onClose(false)} variant='close' size='sm' startIcon={<CloseIcon/>} endIcon={""}/>
+                                    
                                 </span>
                                 <div>
                                     <Input ref={titleRef} placeholder="title"/>

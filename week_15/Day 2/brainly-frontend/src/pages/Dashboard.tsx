@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Button } from '../Components/ui/Button'
 import { PlusIcon } from '../icons/Plus'
@@ -21,6 +21,7 @@ export function Dashboard() {
 
   const { content: contents, loading, error, username } = useFetchContent();
 
+  
   return <div className='bg-slate-300 h-full w-screen'>
    <div className=' '>
     <CreateContentModal open={modalOpen} onClose={()=>{
@@ -31,7 +32,17 @@ export function Dashboard() {
     <Button onClick={ ()=>{
       setModalOpen(true);
     }} variant='primary' text='Add Content' size='sm' startIcon={<PlusIcon/>} endIcon={""} />
-    <Button variant='secondary' text='Share Dashboard' size='sm' startIcon={<ShareIcon/>} endIcon={""}/>
+    <Button onClick={
+      async ()=>{
+        const token = localStorage.getItem("token");
+        const response = await axios.post(`${BACKEND_URL}/api/share/content`,
+          {share : true},
+          { headers : {Authorization : token}}
+        )
+        const shareUrl = `http://localhost:5173${response.data.message}`;
+        alert(shareUrl);
+      }
+    } variant='secondary' text='Share Dashboard' size='sm' startIcon={<ShareIcon/>} endIcon={""}/>
     </div>
     {loading && <p>Loading...</p>}
     {error && <div className='flex flex-wrap gap-2 mx-4 p-4 border-3 border-dashed border-white'> {error} </div>}

@@ -8,7 +8,7 @@ export function useFetchContent() {
   const [error, setError] = useState<string | null>(null);
   const [username ,setUsername] = useState<string>();
 
-  useEffect(() => {
+  function refresh(){
     axios
       .get(`${BACKEND_URL}/api/content`, {
         headers: { Authorization: localStorage.getItem("token") },
@@ -27,6 +27,18 @@ export function useFetchContent() {
         setError("Sever error occured");
         setLoading(false);
       });
+  }
+
+  useEffect(() => {
+    refresh();
+
+    let interval = setInterval( ()=> {
+      refresh()
+    },10*1000); // keep refreshing after 10 seconds .
+
+    return ()=>{
+      clearInterval(interval);
+    }
   }, []);
 
   return { content, loading, error,username };

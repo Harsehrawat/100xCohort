@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 import './../../index.css'
 
 interface ButtonProps {
-    variant : "primary" | "secondary";
+    variant : "primary" | "secondary" | "close" | "delete";
     size : "sm" | "md" | "lg";
     text : string;
     startIcon : any;
@@ -12,11 +12,13 @@ interface ButtonProps {
 }
 
 const variantStyle = {
-    "primary" : "bg-purple-600 text-white hover:bg-purple-700",
-    "secondary" : "bg-purple-200 text-purple-500 hover:bg-purple-300"
+    "primary" : "bg-purple-600 text-white hover:bg-purple-700 hover:scale-125 transition-transform duration-200",
+    "secondary" : "bg-purple-200 text-purple-500 hover:bg-purple-300 hover:scale-125 transition-transform duration-200",
+    "close" : "hover:scale-125 transition-transform duration-200",
+    "delete" : "hover:scale-115 transition-transform duration-200 hover:text-black"
 }
 
-const defaultStyle = " flex items-center gap-2 rounded-md pr-2 pl-2 cursor-pointer text-xs" ;
+const defaultStyle = " flex items-center gap-2 rounded-md pr-2 pl-2 cursor-pointer text-xs " ;
 
 const sizeStyle = {
     "sm" : "py-1 px-2",
