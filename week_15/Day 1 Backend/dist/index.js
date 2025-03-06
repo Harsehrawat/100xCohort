@@ -121,7 +121,6 @@ app.get("/api/content", middleware_1.userMiddleware, (req, res) => __awaiter(voi
     try {
         // fetch username to always display regardless if any content added or not
         const user = yield db_1.UserModel.findOne({ _id: userId }).select("username");
-        console.log(`username received by BE:${user === null || user === void 0 ? void 0 : user.username}`);
         const content = yield db_2.ContentModel.find({ userId: userId }).populate("userId", "username");
         if (content.length != 0) {
             res.status(200).json({ content, username: user === null || user === void 0 ? void 0 : user.username });
@@ -187,11 +186,13 @@ app.get("/api/share/:sharableLink", (req, res) => __awaiter(void 0, void 0, void
     }
     // if such link found , return content and username
     const content = yield db_2.ContentModel.find({ userId: link.userId });
+    // fetching userDetails from UserModel
+    const user = yield db_1.UserModel.findOne({ _id: link.userId });
+    const username = user === null || user === void 0 ? void 0 : user.username;
     if (!content) {
-        res.status(404).json({ message: "empty link / no content added by user associated w/ this link" });
+        res.status(404).json({ message: "empty link / no content added by user associated w/ this link", username });
     }
     // if content found , return content and username
-    const user = yield db_1.UserModel.findOne({ userId: link.userId });
-    res.status(200).json({ username: user === null || user === void 0 ? void 0 : user.username, content });
+    res.status(200).json({ username, content });
 }));
 app.listen(3000);

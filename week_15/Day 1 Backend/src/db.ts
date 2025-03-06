@@ -22,11 +22,11 @@ const ContentSchema = new Schema({
         type: mongoose.Types.ObjectId,
         ref : 'user'
      }],
-    userId : [{
+    userId : {
         type : mongoose.Types.ObjectId ,
         ref : 'user',
         require : true
-    }]
+    }
 })
 
 const LinkSchema = new Schema({

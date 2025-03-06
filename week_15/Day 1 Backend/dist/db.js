@@ -20,11 +20,11 @@ const ContentSchema = new mongoose_2.Schema({
             type: mongoose_1.default.Types.ObjectId,
             ref: 'user'
         }],
-    userId: [{
-            type: mongoose_1.default.Types.ObjectId,
-            ref: 'user',
-            require: true
-        }]
+    userId: {
+        type: mongoose_1.default.Types.ObjectId,
+        ref: 'user',
+        require: true
+    }
 });
 const LinkSchema = new mongoose_2.Schema({
     hash: String,

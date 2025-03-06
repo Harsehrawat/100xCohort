@@ -124,7 +124,6 @@ app.get("/api/content",userMiddleware, async (req,res)=>{
     try{
         // fetch username to always display regardless if any content added or not
         const user = await UserModel.findOne({ _id : userId}).select("username");
-        console.log(`username received by BE:${user?.username}`);
         const content = await ContentModel.find({ userId : userId}).populate("userId","username");
         if(content.length !=0){
             res.status(200).json({ content ,username : user?.username});
@@ -191,13 +190,15 @@ app.get("/api/share/:sharableLink", async (req,res)=>{
     }
     // if such link found , return content and username
     const content = await ContentModel.find({ userId : link.userId});
+    // fetching userDetails from UserModel
+    const user = await UserModel.findOne({_id : link.userId});
+    const username = user?.username;
     if(!content){
-      res.status(404).json({message : "empty link / no content added by user associated w/ this link"});
+      res.status(404).json({message : "empty link / no content added by user associated w/ this link" , username});
     }
     // if content found , return content and username
-    const user = await UserModel.findOne({ userId : link.userId});
 
-    res.status(200).json({ username : user?.username , content});
+    res.status(200).json({ username,content});
 
 })
 
