@@ -23,6 +23,7 @@ export function CreateContentModal({ open, onClose }) {
         if(!title || !link || !type){
             return alert("Title ,link and type can't be empty");
         }
+        // making backend req to 'api/content' for putting new content
         const response = await axios.post(`${BACKEND_URL}/api/content`, { title , link , type},{ headers : {Authorization : token}});
 
         try{

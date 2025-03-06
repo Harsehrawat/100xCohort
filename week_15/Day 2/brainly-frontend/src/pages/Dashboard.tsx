@@ -13,13 +13,19 @@ import axios from 'axios'
 import { BACKEND_URL } from '../config'
 import { useFetchContent } from '../CustomHook/useFetchContent'
 import { Link } from 'react-router-dom'
+import { useFetchSharableLink } from '../CustomHook/useFetchSharableLink'
+
 
 // on opening of dashboard i'sud retrieve contents already added by user .
 
 export function Dashboard() {
   const [modalOpen,setModalOpen] = useState(false);
+  const [sharableLink,setSharableLink] = useState("");
+  const [data ,setData] = useState("");
 
   const { content: contents, loading, error, username } = useFetchContent();
+  const { link,fetchLink} = useFetchSharableLink();
+  
 
   
   return <div className='bg-slate-300 h-full w-screen'>
@@ -32,17 +38,8 @@ export function Dashboard() {
     <Button onClick={ ()=>{
       setModalOpen(true);
     }} variant='primary' text='Add Content' size='sm' startIcon={<PlusIcon/>} endIcon={""} />
-    <Button onClick={
-      async ()=>{
-        const token = localStorage.getItem("token");
-        const response = await axios.post(`${BACKEND_URL}/api/share/content`,
-          {share : true},
-          { headers : {Authorization : token}}
-        )
-        const shareUrl = `http://localhost:5173${response.data.message}`;
-        alert(shareUrl);
-      }
-    } variant='secondary' text='Share Dashboard' size='sm' startIcon={<ShareIcon/>} endIcon={""}/>
+     {/* // share Dashboard button */}
+    <Button onClick={fetchLink} variant='secondary' text='Share Dashboard' size='sm' startIcon={<ShareIcon/>} endIcon={""}/>
     </div>
     {loading && <p>Loading...</p>}
     {error && <div className='flex flex-wrap gap-2 mx-4 p-4 border-3 border-dashed border-white'> {error} </div>}
