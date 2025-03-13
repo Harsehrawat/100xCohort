@@ -14,6 +14,7 @@ import { BACKEND_URL } from '../config'
 import { useFetchContent } from '../CustomHook/useFetchContent'
 import { Link } from 'react-router-dom'
 import { useFetchSharableLink } from '../CustomHook/useFetchSharableLink'
+import { SideBarItem } from '../Components/ui/SidebarItem'
 
 
 // on opening of dashboard i'sud retrieve contents already added by user .
@@ -28,27 +29,75 @@ export function Dashboard() {
   
 
   
-  return <div className='bg-slate-300 h-full w-screen'>
-   <div className=' '>
-    <CreateContentModal open={modalOpen} onClose={()=>{
-      setModalOpen(false);
-    }}/>
-    <p>Hey {username}, welcome to Second Brain .</p>
-    <div className='flex justify-end gap-2 p-3 '>
-    <Button onClick={ ()=>{
-      setModalOpen(true);
-    }} variant='primary' text='Add Content' size='sm' startIcon={<PlusIcon/>} endIcon={""} />
-     {/* // share Dashboard button */}
-    <Button onClick={fetchLink} variant='secondary' text='Share Dashboard' size='sm' startIcon={<ShareIcon/>} endIcon={""}/>
-    </div>
-    {loading && <p>Loading...</p>}
-    {error && <div className='flex flex-wrap gap-2 mx-4 p-4 border-3 border-dashed border-white'> {error} </div>}
+  return (
+  <div className="grid grid-cols-10 h-full">
+      {/* Sidebar */}
+      <div className="bg-orange-500 h-full col-span-2 p-4 shadow-md">
+        <SideBarItem/>
+        {/* Add your sidebar content here */}
+      </div>
+  
+      {/* Main Content */}
+      <div className="bg-black h-full col-span-8 p-4">
+        {/* handling add content current state */}
+        <CreateContentModal
+          open={modalOpen}
+          onClose={() => {
+            setModalOpen(false);
+          }}
+        />
 
-    {!loading && !error && <div className='flex flex-wrap gap-2 mx-4 p-4 border-3 border-dashed border-white'>
-      {contents.map(({title,link,type}) => <Card title={title} link={link} type={type} />)}
-    </div>}
-  </div>
-  </div>
+        {/* handling header text and buttons */}
+        <div className="flex items-center justify-end gap-2 ml-0 p-4">
+          {/* handling header text */}
+          <div className='text-xl text-white font-extrabold '>
+            <div className='flex items-center'>
+              <p>Hey </p>
+              <p className='text-orange-500 px-1'>{username}</p>
+            </div>
+            <p>welcome to Second Brain.</p>
+          </div>
+
+          <div className="flex items-center gap-2 ">
+          <Button
+            onClick={() => {
+              setModalOpen(true);
+            }}
+            variant="primary"
+            text="Add Content"
+            size="sm"
+            startIcon={<PlusIcon />}
+            endIcon={""}
+          />
+          <Button
+            onClick={fetchLink}
+            variant="secondary"
+            text="Share Dashboard"
+            size="md"
+            startIcon={<ShareIcon />}
+            endIcon={""}
+          />
+          </div>
+        </div>
+  
+        {loading && <p>Loading...</p>}
+        {error && (
+          <div className="flex flex-wrap gap-2 mx-4 p-4 border-3 border-dashed border-white">
+            {error}
+          </div>
+        )}
+  
+        {!loading && !error && (
+          <div className="flex flex-wrap gap-2 mx-4 p-4 border-3 border-dashed border-white">
+            {contents.map(({ title, link, type }) => (
+              <Card key={link} title={title} link={link} type={type} />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+  
   
 }
 

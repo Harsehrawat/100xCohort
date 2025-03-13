@@ -52,9 +52,9 @@ export function CreateContentModal({ open, onClose }) {
                     <div className="w-screen h-screen backdrop-blur-md bg-gray-700/30 fixed top-0 left-0  flex justify-center"></div>
                     <div className="w-screen h-screen fixed  top-0 left-0 flex justify-center">
                         <div className="flex flex-col justify-center ">
-                            <span className=" border bg-slate-500/10 backdrop-blur-sm text-black justify-end rounded p-2 ">
+                            <span className=" border backdrop-blur-md text-black justify-end rounded p-2 ">
                                 <span className="flex justify-end">
-                                <Button onClick={()=>onClose(false)} variant='close' size='sm' startIcon={<CloseIcon/>} endIcon={""}/>
+                                <Button onClick={()=>onClose(false)} variant='close' size='sm' startIcon={<CloseIcon/>}/>
                                     
                                 </span>
                                 <div>
