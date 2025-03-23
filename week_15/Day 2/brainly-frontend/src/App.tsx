@@ -14,7 +14,6 @@ function App() {
       <Route path='/signin' element={<LogIn/>} />
       <Route path='/dashboard' element={<Dashboard/>} />
       <Route path="/api/share/:sharableLink" element={< SharedDashboard/>} />
-
     </Routes>
   </BrowserRouter>
   

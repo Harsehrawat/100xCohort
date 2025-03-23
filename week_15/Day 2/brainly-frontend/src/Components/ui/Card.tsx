@@ -4,14 +4,29 @@ import { ShareIcon } from "../../icons/Share"
 import { YTICON } from "../../icons/YouTube"
 import { TwitterIcon } from "../../icons/Tweet"
 import { Button } from "./Button"
+import { useState } from "react"
+import axios from "axios"
+import { BACKEND_URL } from "../../config"
 
 interface CardInterface{
     title : string,
     type : string,
-    link : string
+    link : string,
+    id : string
 }
 
-export function Card({title , type , link} : CardInterface){
+export function Card({title , type , link,id} : CardInterface){
+    const [isDeleting,setIsDeleting] = useState();
+
+    async function handleDelete(){
+        const response = await axios.delete(`${BACKEND_URL}/api/delete/content/${id}` , {
+            headers : {Authorization : localStorage.getItem("token")}
+        });
+
+        alert(await response.data.message);
+    }
+    
+
     return <div className="bg-white rounded-md border-1 shadow-lg hover:scale-101 transition-transform duration-200 border-black w-72 min-height-48 p-2">
         
         <div className=" flex justify-between items-center m-2">
@@ -25,7 +40,7 @@ export function Card({title , type , link} : CardInterface){
             </div>
 
             <div className="text-gray-500">
-                <Button variant="delete" startIcon={<DeleteIcon />} />
+                <Button variant="delete" startIcon={<DeleteIcon />} onClick={handleDelete}/>
             </div>
         </div>
 

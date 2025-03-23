@@ -12,15 +12,15 @@ interface ButtonProps {
 }
 
 const variantStyle = {
-    "primary" : "bg-purple-600 text-white hover:bg-purple-700 hover:scale-105 transition-transform duration-200",
-    "secondary" : "bg-purple-200 text-purple-500 hover:bg-purple-300 hover:scale-105 transition-transform duration-200",
+    "primary" : "bg-orange-600 text-white hover:bg-orange-400 hover:scale-95 transition-transform duration-200",
+    "secondary" : "bg-orange-600 text-white hover:bg-orange-400 hover:scale-95 transition-transform duration-200",
     "close" : "hover:scale-105 transition-transform duration-200",
     "delete" : "hover:scale-105 transition-transform duration-200 hover:text-black",
     "category": "font-medium px-4 py-2 hover:underline underline-offset-4 hover:scale-105 transition-all duration-300 ease-in-out",
     "active-category": "font-medium px-4 py-2 underline underline-offset-4 scale-105 transition-all duration-300 ease-in-out"
 }
 
-const defaultStyle = " flex items-center gap-2 rounded-md pr-2 pl-2 cursor-pointer text-xs " ;
+const defaultStyle = " flex items-center gap-2 rounded-md pr-2 pl-2 cursor-pointer text-xs text-black" ;
 
 const sizeStyle = {
     "sm" : "py-1 px-2",

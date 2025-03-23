@@ -24,7 +24,7 @@ export function Dashboard() {
   const [sharableLink,setSharableLink] = useState("");
   const [data ,setData] = useState("");
 
-  const { content: contents, loading, error, username } = useFetchContent();
+  const { content,loading, error, username } = useFetchContent();
   const { link,fetchLink} = useFetchSharableLink();
   
 
@@ -88,9 +88,9 @@ export function Dashboard() {
         )}
   
         {!loading && !error && (
-          <div className="flex flex-wrap gap-2 mx-4 p-4 border-3 border-dashed border-white">
-            {contents.map(({ title, link, type }) => (
-              <Card key={link} title={title} link={link} type={type} />
+          <div className="flex flex-wrap gap-2 mx-4 p-4 border-1 border-dashed border-white">  
+            {content.map(({_id ,title, link, type }) => (
+              <Card title={title} link={link} type={type} id={_id}/>
             ))}
           </div>
         )}

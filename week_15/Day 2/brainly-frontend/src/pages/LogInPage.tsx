@@ -34,8 +34,8 @@ export function LogIn(){
     }
     return <div className="h-100 w-full flex justify-center items-center">
         <div className="bg-white rounded-md text-black border p-2">
-            <Input ref={usernameRef} placeholder="username"/>
-            <Input ref={passwordRef} placeholder="password"/>
+            <Input ref={usernameRef} placeholder="username" variant="login/signin"/>
+            <Input ref={passwordRef} placeholder="password" variant="login/signin"/>
             <div className="flex justify-center">
                 <Button onClick={LogInHandler} variant="primary" text="log in" italic/>
             </div>
