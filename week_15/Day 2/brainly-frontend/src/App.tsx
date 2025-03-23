@@ -10,7 +10,7 @@ import SharedDashboard from './pages/SharedDashboard'
 function App() {
   return <BrowserRouter>
     <Routes>
-      <Route path='/' element={<Signup/>} />
+      <Route path='/signup' element={<Signup/>} />
       <Route path='/signin' element={<LogIn/>} />
       <Route path='/dashboard' element={<Dashboard/>} />
       <Route path="/api/share/:sharableLink" element={< SharedDashboard/>} />
