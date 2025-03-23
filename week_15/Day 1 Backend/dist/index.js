@@ -15,29 +15,55 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
+// import from other files
 const db_1 = require("./db");
 const db_2 = require("./db");
 const db_3 = require("./db");
 const utils_1 = require("./utils");
-const zod_1 = require("zod");
-// import { userMiddleware } from "./middleware";
 const config_1 = require("./config");
 const cors_1 = __importDefault(require("cors"));
 const middleware_1 = require("./middleware");
+const helmet_1 = __importDefault(require("helmet"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json()); // Middleware to parse JSON request bodies.
 app.use((0, cors_1.default)()); // Middleware to allow cross-origin requests.
+app.use((0, helmet_1.default)({
+    contentSecurityPolicy: false,
+    frameguard: { action: "deny" }
+}));
 // Zod schema for validation
-const signUpSchema = zod_1.z.object({
-    username: zod_1.z.string()
+const Joi = require("joi");
+const inputValidation = Joi.object({
+    username: Joi
+        .string()
         .min(3)
-        .max(20)
-        .regex(/^[a-z0-9_.]+$/, "Username can only contain lowercase letters, numbers, and _ , ."),
-    password: zod_1.z.string().min(5).max(15).regex(/^[a-zA-Z0-9@_.$]+$/)
+        .max(15)
+        .pattern(/^[a-z0-9]+$/)
+        .messages({
+        "string.min": "Username must be at least 3 characters long",
+        "string.max": "Username can't be longer than 15 characters",
+        "string.pattern.base": "Username can only contain lowercase letters and numbers"
+    })
+        .required(),
+    password: Joi
+        .string()
+        .min(5)
+        .max(15)
+        .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$&]).*$/)
+        .messages({
+        "string.min": "Password must be at least 5 characters long",
+        "string.max": "Password can't be longer than 15 characters",
+        "string.pattern.base": "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (@, #, $, &)"
+    })
+        .required()
 });
 app.post("/api/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { error } = inputValidation.validate(req.body);
+    if (error) {
+        return res.status(403).json({ message: error.details[0].message });
+    }
     try {
-        const { username, password } = signUpSchema.parse(req.body);
+        const { username, password } = req.body;
         // Check if user already exists
         const ifUserExists = yield db_1.UserModel.findOne({ username });
         if (ifUserExists) {
@@ -56,12 +82,7 @@ app.post("/api/signup", (req, res) => __awaiter(void 0, void 0, void 0, function
         });
     }
     catch (error) {
-        if (error instanceof zod_1.z.ZodError) {
-            return res.status(411).json({
-                message: "Invalid input"
-            });
-        }
-        console.log("Server error", error);
+        console.log("Server error at /signup BE :", error);
         res.status(500).json({
             message: "Internal server error"
         });
@@ -133,18 +154,18 @@ app.get("/api/content", middleware_1.userMiddleware, (req, res) => __awaiter(voi
         console.log("server error " + e);
     }
 }));
-app.delete("/api/delete/content", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const contentId = req.body.contentId;
+app.delete("/api/delete/content/:contentId", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { contentId } = req.params;
     // find and return 
     try {
         yield db_2.ContentModel.deleteMany({
-            contentId,
-            userId: req.userId
+            _id: contentId,
         });
         res.status(200).json({ message: "deleted successfully" });
     }
     catch (e) {
         console.log("server eror in content delete" + e);
+        res.status(403).json({ message: e });
     }
 }));
 app.post("/api/share/content", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {

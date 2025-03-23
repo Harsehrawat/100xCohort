@@ -1,38 +1,67 @@
 import express from "express";
-import mongoose  from "mongoose";
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt";
+
+// import from other files
 import { UserModel } from "./db";
 import {ContentModel} from "./db";
 import { LinkModel } from "./db";
 import { random } from "./utils";
 import { string, z } from "zod";
 import { Request, Response } from "express";
-// import { userMiddleware } from "./middleware";
 import { JWT_SECRET_KEY } from "./config";
 import cors from "cors";
 import { userMiddleware } from "./middleware";
-
+import helmet from "helmet";
 
 
 const app = express();
 app.use(express.json()); // Middleware to parse JSON request bodies.
 app.use(cors()); // Middleware to allow cross-origin requests.
+app.use(helmet({  // helment to prevent DDOS and frame Attacks 
+  contentSecurityPolicy : false,
+  frameguard : {action : "deny"}
+}));
 
 // Zod schema for validation
-const signUpSchema = z.object({
-    username : z.string()
+const Joi = require("joi");
+
+const inputValidation = Joi.object({
+  username: Joi
+    .string()
     .min(3)
-    .max(20)
-    .regex(/^[a-z0-9_.]+$/, "Username can only contain lowercase letters, numbers, and _ , ."),
-  
-    password : z.string().min(5).max(15).regex(/^[a-zA-Z0-9@_.$]+$/)
+    .max(15)
+    .pattern(/^[a-z0-9]+$/)
+    .messages({
+      "string.min": "Username must be at least 3 characters long",
+      "string.max": "Username can't be longer than 15 characters",
+      "string.pattern.base": "Username can only contain lowercase letters and numbers"
+    })
+    .required(),
+
+  password: Joi
+    .string()
+    .min(5)
+    .max(15)
+    .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$&]).*$/) 
+    .messages({
+      "string.min": "Password must be at least 5 characters long",
+      "string.max": "Password can't be longer than 15 characters",
+      "string.pattern.base": "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (@, #, $, &)"
+    })
+    .required()
 });
 
+
 app.post("/api/signup", async (req: Request, res: Response): Promise<any> => {
-    try {
-      const { username, password } = signUpSchema.parse(req.body);
+
+  const {error} = inputValidation.validate(req.body);
+  if(error){
+    return res.status(403).json({message : error.details[0].message});
+  }
   
+    try{
+      const {username , password} = req.body;
       // Check if user already exists
       const ifUserExists = await UserModel.findOne({ username });
       if (ifUserExists) {
@@ -51,13 +80,9 @@ app.post("/api/signup", async (req: Request, res: Response): Promise<any> => {
       res.status(200).json({
         message: "Signup successful"
       });
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return res.status(411).json({
-          message: "Invalid input"
-        });
-      }
-      console.log("Server error", error);
+    } 
+    catch (error) {
+      console.log("Server error at /signup BE :", error);
       res.status(500).json({
         message: "Internal server error"
       });
@@ -126,7 +151,7 @@ app.get("/api/content",userMiddleware, async (req,res)=>{
         const user = await UserModel.findOne({ _id : userId}).select("username");
         const content = await ContentModel.find({ userId : userId}).populate("userId","username");
         if(content.length !=0){
-            res.status(200).json({ content ,username : user?.username});
+            res.status(200).json({ content ,username  : user?.username});
         }
         else{
             res.status(200).json({ message : "you have added nothing yet" , username : user?.username});
@@ -137,19 +162,19 @@ app.get("/api/content",userMiddleware, async (req,res)=>{
     }
 });
 
-app.delete("/api/delete/content", userMiddleware,async (req,res)=>{
-    const contentId = req.body.contentId;
+app.delete("/api/delete/content/:contentId", userMiddleware,async (req,res)=>{
+    const {contentId} = req.params;
     // find and return 
     try{
         await ContentModel.deleteMany({
-            contentId,
-            userId : req.userId
+            _id : contentId,
         })
         res.status(200).json({message : "deleted successfully"});
         
     }
     catch(e){
         console.log("server eror in content delete"+e);
+        res.status(403).json({message : e});
     }
 });
 
