@@ -61,7 +61,9 @@ app.post("/api/signup", async (req: Request, res: Response): Promise<any> => {
   }
   
     try{
+      console.log("inside /api/signup");
       const {username , password} = req.body;
+      console.log("searching for :" +req.body.username + " ,password :"+req.body.password);
       // Check if user already exists
       const ifUserExists = await UserModel.findOne({ username });
       if (ifUserExists) {

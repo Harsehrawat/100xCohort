@@ -63,7 +63,9 @@ app.post("/api/signup", (req, res) => __awaiter(void 0, void 0, void 0, function
         return res.status(403).json({ message: error.details[0].message });
     }
     try {
+        console.log("inside /api/signup");
         const { username, password } = req.body;
+        console.log("searching for :" + req.body.username + " ,password :" + req.body.password);
         // Check if user already exists
         const ifUserExists = yield db_1.UserModel.findOne({ username });
         if (ifUserExists) {
