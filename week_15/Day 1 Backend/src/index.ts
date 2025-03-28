@@ -145,15 +145,17 @@ app.post("/api/content",userMiddleware ,async (req, res)=>{
 })
 
 
-app.get("/api/content",userMiddleware, async (req,res)=>{
+app.get("/api/content/:type",userMiddleware, async (req,res)=>{
     const userId = req.userId;
+    const {type} = req.params;
     // from contentModel return content w/ this userId
     try{
         // fetch username to always display regardless if any content added or not
         const user = await UserModel.findOne({ _id : userId}).select("username");
         const content = await ContentModel.find({ userId : userId}).populate("userId","username");
+        const contentType = content.filter( (i) => i.type === type);
         if(content.length !=0){
-            res.status(200).json({ content ,username  : user?.username});
+            res.status(200).json({ contentType ,username  : user?.username});
         }
         else{
             res.status(200).json({ message : "you have added nothing yet" , username : user?.username});
