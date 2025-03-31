@@ -1,17 +1,16 @@
-import { useState } from "react";
-import { useFetchContent } from "../CustomHook/useFetchContent";
-import { useFetchSharableLink } from "../CustomHook/useFetchSharableLink";
 import { SideBarItem } from "../Components/ui/SidebarItem";
 import { CreateContentModal } from "../Components/ui/CreateContentModal";
+import { useFetchSharableLink } from "../CustomHook/useFetchSharableLink";
+import { useState } from "react";
+import { useFetchContent } from "../CustomHook/useFetchContent";
 import { Button } from "../Components/ui/Button";
-import { PlusIcon } from "../icons/Plus";
-import { ShareIcon } from "../icons/Share";
+import { PlusIcon, ShareIcon } from "lucide-react";
 import { Card } from "../Components/ui/Card";
-import { div } from "framer-motion/client";
 
-export function Dashboard() {
-  const [modalOpen, setModalOpen] = useState(false);
-  const { content, loading, error, username } = useFetchContent();
+export function TweetDashboard(){
+    console.log("Inside TweetDashboard");
+    const [modalOpen, setModalOpen] = useState(false);
+  const { content, loading, error, username,isEmpty } = useFetchContent("Tweet");
   const { fetchLink } = useFetchSharableLink();
 
   return (
@@ -65,8 +64,15 @@ export function Dashboard() {
         )}
 
         {/* Content Grid */}
+        {isEmpty && (
+            <div className="text-white bg-red-500 p-4 rounded-md mt-4">
+            <p> No content of the selected category added yet ! </p>
+          </div>
+        )
+        }
+
         {!loading && !error && (
-          <div className="grid grid-cols-3 gap-4 p-4">
+          <div className="grid grid-cols-3 gap-4 p-4 flex flex-cols">
             {content.map(({ _id, title, link, type }) => (
               <Card key={_id} title={title} link={link} type={type} id={_id} />
             ))}

@@ -27,7 +27,7 @@ export function LogIn(){
                 // store token in localStorage and navigate to dashboard fn
                 alert(`${response.data.message}`);
                 localStorage.setItem("token",response.data.token);
-                navigate("/dashboard");
+                navigate("/homePage");
             }   
         }catch(e: any){
             console.log(e);
@@ -41,7 +41,7 @@ export function LogIn(){
         <div className="bg-white rounded-md text-black border p-4">
             <p className="flex justify-center font-bold"> Enter your Details </p>
             <Input ref={usernameRef} placeholder="Username" variant="login/signin" />
-            <Input ref={passwordRef} placeholder="Password" type="password" variant="login/signin" />
+            <Input ref={passwordRef} placeholder="Password" variant="login/signin" />
             <div className="flex justify-center m-1">
                 <Button onClick={LogInHandler} variant="primary" text="Log In" italic />
             </div>

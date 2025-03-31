@@ -21,7 +21,7 @@ export function Signup(){
             if(response.status === 200){
                 alert(`${response.data.message}, you can now login to your account`)
                 // navigate to loginPage
-                navigate("/signin");
+                navigate("/");
             } 
             else if(response.status === 403) return alert(`${response.data.message}`);
         }catch(e: any){
@@ -37,13 +37,13 @@ export function Signup(){
         <div className="bg-white rounded-md text-black border p-4">
             <p className="flex justify-center font-bold"> Create Your Free Account </p>
             <Input ref={usernameRef} placeholder="Username" variant="login/signin"/>
-            <Input ref={passwordRef} placeholder="Password" type="password" variant="login/signin" />
+            <Input ref={passwordRef} placeholder="Password" variant="login/signin" />
             <div className="flex justify-center m-1">
-                <Button onClick={Signup} variant="primary" text="Create Account" italic />
+                <Button onClick={signupHandler} variant="primary" text="Create Account" italic />
             </div>
             <p className="text-xs text-center m-2 ">
                 Already have an Account ?{" "}
-                <Link to="/signin" className="text-blue-600 underline cursor-pointer">
+                <Link to="/" className="text-blue-600 underline cursor-pointer">
                     Click to Login 
                 </Link>
             </p>

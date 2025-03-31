@@ -5,14 +5,22 @@ import { LogIn } from './pages/LogInPage'
 import { Signup } from './pages/SignupPage'
 import { BrowserRouter , Routes, Route } from 'react-router-dom'
 import SharedDashboard from './pages/SharedDashboard'
+import { HomePage } from './pages/HomePage'
+import { TweetDashboard } from './DashBoard/TweetDashboard'
+import { DocumentDashboard } from './DashBoard/DocumentDashboard'
+import { YouTubeDashBoard } from './DashBoard/YouTubeDashboard'
 
 
 function App() {
   return <BrowserRouter>
     <Routes>
       <Route path='/signup' element={<Signup/>} />
-      <Route path='/signin' element={<LogIn/>} />
-      <Route path='/dashboard' element={<Dashboard/>} />
+      <Route path='/' element={<LogIn/>} />
+      <Route path='/homePage' element={<HomePage/>} />
+      <Route path='/dashboard' element={<Dashboard/>}/>
+      <Route path='/content/tweet' element={<TweetDashboard/>}/>
+      <Route path='/content/document' element={<DocumentDashboard/>}/>
+      <Route path='/content/youtube' element={<YouTubeDashBoard/>}/>
       <Route path="/api/share/:sharableLink" element={< SharedDashboard/>} />
     </Routes>
   </BrowserRouter>

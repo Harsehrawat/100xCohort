@@ -1,17 +1,16 @@
-import { useState } from "react";
-import { useFetchContent } from "../CustomHook/useFetchContent";
-import { useFetchSharableLink } from "../CustomHook/useFetchSharableLink";
-import { SideBarItem } from "../Components/ui/SidebarItem";
-import { CreateContentModal } from "../Components/ui/CreateContentModal";
-import { Button } from "../Components/ui/Button";
-import { PlusIcon } from "../icons/Plus";
-import { ShareIcon } from "../icons/Share";
+import { func } from "joi";
 import { Card } from "../Components/ui/Card";
-import { div } from "framer-motion/client";
+import { PlusIcon, ShareIcon } from "lucide-react";
+import { Button } from "../Components/ui/Button";
+import { CreateContentModal } from "../Components/ui/CreateContentModal";
+import { SideBarItem } from "../Components/ui/SidebarItem";
+import { useFetchSharableLink } from "../CustomHook/useFetchSharableLink";
+import { useFetchContent } from "../CustomHook/useFetchContent";
+import { useState } from "react";
 
-export function Dashboard() {
-  const [modalOpen, setModalOpen] = useState(false);
-  const { content, loading, error, username } = useFetchContent();
+export function DocumentDashboard(){
+    const [modalOpen, setModalOpen] = useState(false);
+  const { content, loading, error, username,isEmpty } = useFetchContent("Document");
   const { fetchLink } = useFetchSharableLink();
 
   return (
@@ -64,6 +63,13 @@ export function Dashboard() {
           </div>
         )}
 
+        {isEmpty && (
+            <div className="text-white bg-red-500 p-4 flex rounded-md mt-4">
+            <p> No content of the selected category added yet ! </p>
+          </div>
+        )
+        }
+
         {/* Content Grid */}
         {!loading && !error && (
           <div className="grid grid-cols-3 gap-4 p-4">
@@ -75,4 +81,5 @@ export function Dashboard() {
       </div>
     </div>
   );
+
 }

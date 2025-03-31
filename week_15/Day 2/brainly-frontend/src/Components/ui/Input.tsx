@@ -6,7 +6,7 @@ interface InputProps{
 }
 
 const variantStyle = {
-    "login/signin" : "border-2 border-gray-300 focus:border-orange-500 p-2 rounded-md"
+    "login/signin" : "hover:border-orange-400 p-2 rounded-md"
 }
 
 const defaultStyle = "m-2";

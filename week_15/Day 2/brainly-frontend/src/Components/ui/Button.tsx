@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 import './../../index.css'
 
 interface ButtonProps {
-    variant : "primary" | "secondary" | "close" | "delete" |"category" | "active-category";
+    variant : "primary" | "secondary" | "close" | "delete" |"category" | "active-category" | "log-out";
     size : "sm" | "md" | "lg";
     text : string;
     startIcon : any;
@@ -17,7 +17,8 @@ const variantStyle = {
     "close" : "hover:scale-105 transition-transform duration-200",
     "delete" : "hover:scale-105 transition-transform duration-200 hover:text-black",
     "category": "font-medium px-4 py-2 hover:underline underline-offset-4 hover:scale-105 transition-all duration-300 ease-in-out",
-    "active-category": "font-medium px-4 py-2 underline underline-offset-4 scale-105 transition-all duration-300 ease-in-out"
+    "active-category": "font-medium px-4 py-2 underline underline-offset-4 scale-105 transition-all duration-300 ease-in-out",
+    "log-out" : "text-black hover:text-white hover:bg-red-500 active:bg-red-600 rounded-md transition-all duration-200 ease-in-out"
 }
 
 const defaultStyle = " flex items-center gap-2 rounded-md pr-2 pl-2 cursor-pointer text-xs text-black" ;
