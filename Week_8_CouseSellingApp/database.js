@@ -29,8 +29,8 @@ const courseSchema = new Schema({
 })
 
 const purchaseSchema = new Schema({
-    userId: ObjectId,
-    courseId: ObjectId
+    userId: {type : ObjectId, ref : "User"},
+    courseId: {type : ObjectId , ref : "Course"}
 })
 
 // Create models

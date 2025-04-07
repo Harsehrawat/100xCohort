@@ -1,8 +1,9 @@
 import mongoose, { Mongoose, Types, Document } from "mongoose";
 import { model, Schema } from "mongoose";
 import { string } from "zod";
+import { MONGO_URL } from "./config";
 const ObjectId = mongoose.Types.ObjectId;
-mongoose.connect("mongodb+srv://harsehrawat:VGV4e7QDzTVzwiYt@cluster0.lgwkk.mongodb.net/second-brain");
+mongoose.connect(MONGO_URL);
 
 export interface IUser extends Document{
     username : string,

@@ -72,7 +72,7 @@ export function TweetDashboard(){
         }
 
         {!loading && !error && (
-          <div className="grid grid-cols-3 gap-4 p-4 flex flex-cols">
+          <div className="grid grid-cols-3 gap-4 p-4 flex ">
             {content.map(({ _id, title, link, type }) => (
               <Card key={_id} title={title} link={link} type={type} id={_id} />
             ))}

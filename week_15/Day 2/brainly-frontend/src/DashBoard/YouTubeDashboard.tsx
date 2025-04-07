@@ -1,4 +1,3 @@
-import { func } from "joi";
 import { Card } from "../Components/ui/Card";
 import { PlusIcon, ShareIcon } from "lucide-react";
 import { Button } from "../Components/ui/Button";

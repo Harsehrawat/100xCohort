@@ -8,6 +8,7 @@ const jwt  = require("jsonwebtoken");
 const JWT_SECRET_KEY = "randomilovekiara";
 app.use(express.json());
 const cors = require("cors");
+
 app.use(cors());  // Allow all domains, or configure specific domains
 
 app.use(express.static(path.join(__dirname)));
