@@ -6,18 +6,38 @@ import { useFetchContent } from "../CustomHook/useFetchContent";
 import { Button } from "../Components/ui/Button";
 import { PlusIcon, ShareIcon } from "lucide-react";
 import { Card } from "../Components/ui/Card";
+import { SharedSideBarItem } from "../pages/SharedSideBarItem";
 
-export function TweetDashboard(){
-    console.log("Inside TweetDashboard");
-    const [modalOpen, setModalOpen] = useState(false);
+type TweetDashboardProps = {
+  isGuestView: boolean;
+};
+
+
+export function TweetDashboard({isGuestView} : TweetDashboardProps){
+  console.log("Inside TweetDashboard");
+  const [modalOpen, setModalOpen] = useState(false);
   const { content, loading, error, username,isEmpty } = useFetchContent("Tweet");
   const { fetchLink } = useFetchSharableLink();
 
+  const headingGuest = (
+    <>
+      <p>You're viewing second brain of <span className="text-orange-500">{username}</span>.</p>
+      <p>You can only view the shared content.</p>
+    </>
+  );
+  
+  const headingUser = (
+    <>
+      <p>Hey <span className="text-orange-500">{username}</span>,</p>
+      <p>Welcome to Second Brain.</p>
+    </>
+  );
+  
   return (
     <div className="grid grid-cols-10 h-screen">
       {/* Sidebar */}
       <div className="bg-orange-500 h-screen col-span-2 p-4 shadow-md flex flex-col">
-        <SideBarItem />
+        {isGuestView ? <SharedSideBarItem /> : <SideBarItem />}
       </div>
 
       {/* Main Content */}
@@ -32,12 +52,11 @@ export function TweetDashboard(){
         <div className="flex items-center justify-between p-4 bg-gray-900 rounded-md">
           {/* Welcome Text */}
           <div className="text-white text-lg font-semibold">
-            <p>Hey <span className="text-orange-500">{username}</span>,</p>
-            <p>Welcome to Second Brain.</p>
+            {isGuestView ? headingGuest : headingUser}
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-3">
+          {!isGuestView && (<div className="flex items-center gap-3">
             <Button
               onClick={() => setModalOpen(true)}
               variant="primary"
@@ -52,7 +71,7 @@ export function TweetDashboard(){
               size="md"
               startIcon={<ShareIcon />}
             />
-          </div>
+          </div>)}
         </div>
 
         {/* Loading / Error Messages */}
@@ -74,7 +93,7 @@ export function TweetDashboard(){
         {!loading && !error && (
           <div className="grid grid-cols-3 gap-4 p-4 flex ">
             {content.map(({ _id, title, link, type }) => (
-              <Card key={_id} title={title} link={link} type={type} id={_id} />
+              <Card key={_id} title={title} link={link} type={type} id={_id} isGuestView = {isGuestView} />
             ))}
           </div>
         )}

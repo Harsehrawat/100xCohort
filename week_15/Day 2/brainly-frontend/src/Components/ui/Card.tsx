@@ -12,10 +12,11 @@ interface CardInterface{
     title : string,
     type : string,
     link : string,
-    id : string
+    id : string,
+    isGuestView : boolean
 }
 
-export function Card({title , type , link,id} : CardInterface){
+export function Card({title , type , link,id,isGuestView} : CardInterface){
     const [isDeleting,setIsDeleting] = useState();
 
     async function handleDelete(){
@@ -39,9 +40,9 @@ export function Card({title , type , link,id} : CardInterface){
                 {title}
             </div>
 
-            <div className="text-gray-500">
+            {!isGuestView && (<div className="text-gray-500">
                 <Button variant="delete" startIcon={<DeleteIcon />} onClick={handleDelete}/>
-            </div>
+            </div>)}
         </div>
 
         <div className="mt-4 mb-2 ml-2 mr-2 h-fit">

@@ -7,7 +7,11 @@ import { useFetchSharableLink } from "../CustomHook/useFetchSharableLink";
 import { useFetchContent } from "../CustomHook/useFetchContent";
 import { useState } from "react";
 
-export function YouTubeDashBoard(){
+type YouTubeDashBoardProp = {
+  isGuestView : boolean
+}
+
+export function YouTubeDashBoard({isGuestView} : YouTubeDashBoardProp){
     const [modalOpen, setModalOpen] = useState(false);
   const { content, loading, error, username,isEmpty } = useFetchContent("YouTube");
   const { fetchLink } = useFetchSharableLink();
@@ -36,7 +40,7 @@ export function YouTubeDashBoard(){
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-3">
+          {!isGuestView && (<div className="flex items-center gap-3">
             <Button
               onClick={() => setModalOpen(true)}
               variant="primary"
@@ -51,7 +55,7 @@ export function YouTubeDashBoard(){
               size="md"
               startIcon={<ShareIcon />}
             />
-          </div>
+          </div>)}
         </div>
 
         {/* Loading / Error Messages */}

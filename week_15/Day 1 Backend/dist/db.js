@@ -6,8 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.LinkModel = exports.ContentModel = exports.UserModel = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const mongoose_2 = require("mongoose");
+const config_1 = require("./config");
 const ObjectId = mongoose_1.default.Types.ObjectId;
-mongoose_1.default.connect("mongodb+srv://harsehrawat:VGV4e7QDzTVzwiYt@cluster0.lgwkk.mongodb.net/second-brain");
+mongoose_1.default.connect(config_1.MONGO_URL);
 const UserSchema = new mongoose_2.Schema({
     username: { type: String, unique: true },
     password: String

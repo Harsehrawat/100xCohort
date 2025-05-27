@@ -18,9 +18,9 @@ function App() {
       <Route path='/' element={<LogIn/>} />
       <Route path='/homePage' element={<HomePage/>} />
       <Route path='/dashboard' element={<Dashboard/>}/>
-      <Route path='/content/tweet' element={<TweetDashboard/>}/>
-      <Route path='/content/document' element={<DocumentDashboard/>}/>
-      <Route path='/content/youtube' element={<YouTubeDashBoard/>}/>
+      <Route path='/content/tweet' element={<TweetDashboard isGuestView={false}/>}/>
+      <Route path='/content/document' element={<DocumentDashboard isGuestView={false}/>}/>
+      <Route path='/content/youtube' element={<YouTubeDashBoard isGuestView={false}/>}/>
       <Route path="/api/share/:sharableLink" element={< SharedDashboard/>} />
     </Routes>
   </BrowserRouter>

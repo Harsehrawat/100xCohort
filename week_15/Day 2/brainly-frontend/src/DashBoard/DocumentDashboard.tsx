@@ -8,7 +8,11 @@ import { useFetchSharableLink } from "../CustomHook/useFetchSharableLink";
 import { useFetchContent } from "../CustomHook/useFetchContent";
 import { useState } from "react";
 
-export function DocumentDashboard(){
+type DocumentDashboardProp = {
+  isGuestView : boolean
+}
+
+export function DocumentDashboard({isGuestView} : DocumentDashboardProp){
     const [modalOpen, setModalOpen] = useState(false);
   const { content, loading, error, username,isEmpty } = useFetchContent("Document");
   const { fetchLink } = useFetchSharableLink();
