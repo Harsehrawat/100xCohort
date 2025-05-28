@@ -18,9 +18,12 @@ export function SharedSideBarItem() {
     const [guestView,isGuestView] = useState(true);
 
     function handleCategory(category: string) {
-        setActiveCategory(category);
-        fetchCategoryData(category);
+        if (activeCategory !== category) {
+            setActiveCategory(category);
+            fetchCategoryData(category);
+        }
     }
+    
 
     function fetchCategoryData(category: string) {
         // ToDo: Fetch data from backend based on category

@@ -83,15 +83,12 @@ export function Card({ title, type, link, id, isGuestView }: CardInterface) {
           </blockquote>
         )}
         {type === "Document" && (
-  <iframe
-    src={link}
-    title={title}
-    className="w-full h-64 rounded-md"
-    sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-    frameBorder="0"
-  />
-)}
-
+          <p className="text-blue-500 underline underline-offset-2">
+            <a href={link} target="_blank" rel="noopener noreferrer">
+              {link}
+            </a>
+          </p>
+        )}
       </div>
     </div>
   );

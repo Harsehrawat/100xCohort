@@ -27,7 +27,7 @@ export function LogIn(){
                 // store token in localStorage and navigate to dashboard fn
                 alert(`${response.data.message}`);
                 localStorage.setItem("token",response.data.token);
-                navigate("/homePage");
+                navigate("/dashboard");
             }   
         }catch(e: any){
             console.log(e);

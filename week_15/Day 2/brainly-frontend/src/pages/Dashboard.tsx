@@ -15,14 +15,14 @@ export function Dashboard() {
   const { fetchLink } = useFetchSharableLink();
 
   return (
-    <div className="grid grid-cols-10 h-screen">
+    <div className="flex h-screen">
       {/* Sidebar */}
-      <div className="bg-orange-500 h-screen col-span-2 p-4 shadow-md flex flex-col">
+      <div className="w-1/5 bg-orange-500 p-4 shadow-md flex flex-col">
         <SideBarItem />
       </div>
 
       {/* Main Content */}
-      <div className="bg-black h-screen col-span-8 p-6 flex flex-col">
+      <div className="w-4/5 bg-black p-6 overflow-y-auto">
         {/* Add Content Modal */}
         <CreateContentModal
           open={modalOpen}
@@ -67,7 +67,7 @@ export function Dashboard() {
         {/* Content Grid */}
         {/* Content Grid */}
 {!loading && !error && (
-  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 auto-rows-[350px] mt-6">
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
     {content.map(({ _id, title, link, type }) => (
       <Card key={_id} title={title} link={link} type={type} id={_id} />
     ))}

@@ -6,6 +6,7 @@ import { SideBarItem } from "../Components/ui/SidebarItem";
 import { useFetchSharableLink } from "../CustomHook/useFetchSharableLink";
 import { useFetchContent } from "../CustomHook/useFetchContent";
 import { useState } from "react";
+import { SharedSideBarItem } from "../pages/SharedSideBarItem";
 
 type YouTubeDashBoardProp = {
   isGuestView : boolean
@@ -16,15 +17,30 @@ export function YouTubeDashBoard({isGuestView} : YouTubeDashBoardProp){
   const { content, loading, error, username,isEmpty } = useFetchContent("YouTube");
   const { fetchLink } = useFetchSharableLink();
 
+  const headingGuest = (
+    <>
+      <p>You're viewing second brain of <span className="text-orange-500">{username}</span>.</p>
+      <p>You can only view the shared content.</p>
+    </>
+  );
+
+  const headingUser = (
+    <>
+      <p>Hey <span className="text-orange-500">{username}</span>,</p>
+      <p>Welcome to Second Brain.</p>
+    </>
+  );
+
   return (
-    <div className="grid grid-cols-10 h-screen">
+    <div className="flex h-screen">
       {/* Sidebar */}
-      <div className="bg-orange-500 h-screen col-span-2 p-4 shadow-md flex flex-col">
-        <SideBarItem />
+      <div className="w-1/5 bg-orange-500 p-4 shadow-md flex flex-col">
+        {isGuestView ? <SharedSideBarItem /> : <SideBarItem />}
       </div>
 
+
       {/* Main Content */}
-      <div className="bg-black h-screen col-span-8 p-6 flex flex-col">
+      <div className="w-4/5 bg-black p-6 overflow-y-auto">
         {/* Add Content Modal */}
         <CreateContentModal
           open={modalOpen}
@@ -35,8 +51,7 @@ export function YouTubeDashBoard({isGuestView} : YouTubeDashBoardProp){
         <div className="flex items-center justify-between p-4 bg-gray-900 rounded-md">
           {/* Welcome Text */}
           <div className="text-white text-lg font-semibold">
-            <p>Hey <span className="text-orange-500">{username}</span>,</p>
-            <p>Welcome to Second Brain.</p>
+            {isGuestView ? headingGuest : headingUser}
           </div>
 
           {/* Action Buttons */}
@@ -75,9 +90,9 @@ export function YouTubeDashBoard({isGuestView} : YouTubeDashBoardProp){
 
         {/* Content Grid */}
         {!loading && !error && (
-          <div className="grid grid-cols-3 gap-4 p-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
             {content.map(({ _id, title, link, type }) => (
-              <Card key={_id} title={title} link={link} type={type} id={_id} />
+              <Card key={_id} title={title} link={link} type={type} id={_id} isGuestView={isGuestView} />
             ))}
           </div>
         )}
