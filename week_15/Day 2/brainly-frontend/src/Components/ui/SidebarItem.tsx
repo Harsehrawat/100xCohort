@@ -9,7 +9,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { nav } from "framer-motion/client";
 
 export function SideBarItem() {
-    const [activeCategory, setActiveCategory] = useState<string>("About");
+    const [activeCategory, setActiveCategory] = useState<string>("All");
     const [showLogOutModal, setShowLogOutModal] = useState(false);  // Controls logout confirmation modal
     const navigate = useNavigate();
 
@@ -20,8 +20,8 @@ export function SideBarItem() {
 
     function fetchCategoryData(category: string) {
         // ToDo: Fetch data from backend based on category
-        if(category === "About"){
-            navigate("/homePage");
+        if(category === "All"){
+            navigate("/content");
         }
         else if(category === "Tweet"){
             console.log("navigate called to :"+category)
@@ -62,9 +62,9 @@ export function SideBarItem() {
                     <ul className="flex flex-col gap-4">
                         <li>
                             <Button
-                                onClick={()=>handleCategory("About")}
-                                variant={activeCategory === "About" ? "active-category" : "category"}
-                                text="About"
+                                onClick={()=>handleCategory("All")}
+                                variant={activeCategory === "All" ? "active-category" : "category"}
+                                text="All"
                                 startIcon={<AboutIcon/>}
                             />
                         </li>

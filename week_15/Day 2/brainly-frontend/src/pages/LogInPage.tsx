@@ -35,7 +35,7 @@ export function LogIn(){
         }                
         
     }
-    return <div className="h-screen w-full grid grid-cols-2 bg-linear-65 from-yellow-500 to-orange-600">
+    return <div className="h-screen w-full grid grid-cols-2 bg-gradient-to-r from-yellow-500 to-orange-600">
     {/* Left Section */}
     <div className="flex items-center justify-center h-full">
         <div className="bg-white rounded-md text-black border p-4">
@@ -56,33 +56,39 @@ export function LogIn(){
     </div>
 
     {/* Right Section */}
-    <div className="flex flex-col items-center text-center p-8 mt-20 space-y-4">
-        <HomeIcon />
-        <p>
-            <strong>Second Brain</strong> is created with love, passion, and dedication to make a useful 
-            software for people to use in their daily life.
-        </p>
-
+    <div className="flex items-center justify-center h-full">
+    <div className="flex flex-col items-center text-center p-8 space-y-4">
+            <div className="text-center space-y-4">
+                <p className="text-xl font-semibold text-white">Save all your <span className="underline underline-offset-4">social media bookmarks</span> in one place!</p>
+                <div className="flex justify-center">
+                    <HomeIcon />
+                </div>
+                <p className="text-3xl font-bold text-white tracking-wider"> <span className="text-yellow-300">Second</span> Brain</p>
+            </div>
         <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
-        <p className="text-black font-bold underline underline-offset-8">
-            <strong>Connect With Developer</strong> 
-        </p>
-
-        <div className="flex flex-row gap-4 m-2">
-            <a href="https://github.com/harsehrawat" 
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center space-x-2 transition duration-300 transform hover:scale-110 hover:text-white">
-                <GithubIcon />
-            </a>
-            <a href="https://www.linkedin.com/in/harsh-sehrawat-308793292/" 
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center space-x-2 transition duration-300 transform hover:scale-110 hover:text-white">
-                <LinkedIcon />
-            </a>
-        </div>
-        </div>
+                <p className="text-black font-bold underline underline-offset-8">
+                  <strong>Connect With Developer</strong>
+                </p>
+                <div className="flex flex-row gap-4 mt-2">
+                  <a
+                    href="https://github.com/harsehrawat"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center space-x-2 transition duration-300 transform hover:scale-110 hover:text-white"
+                  >
+                    <GithubIcon />
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/in/harsh-sehrawat-308793292/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center space-x-2 transition duration-300 transform hover:scale-110 hover:text-white"
+                  >
+                    <LinkedIcon />
+                  </a>
+                </div>
+              </div>
+    </div>
     </div>
 </div>
 

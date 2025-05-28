@@ -144,6 +144,20 @@ app.post("/api/content",userMiddleware ,async (req, res)=>{
     
 })
 
+app.get("/api/content",userMiddleware, async (req,res) =>{
+  const userId = req.userId;
+  // from content model return content w/ this user id
+  try{
+    const user = await UserModel.findOne({ _id : userId}).select("username");
+    const content = await ContentModel.find({userId : userId});
+    if(content.length !=0 ) res.status(200).json({content , username : user?.username});
+    else res.status(200).json({message : "you have added nothing yet" , username : user?.username});
+  }
+  catch(e){
+    res.status(500).json({message : "server error"});
+    console.log("error in .get(/api/content)");
+  }
+})
 
 app.get("/api/content/:type",userMiddleware, async (req,res)=>{
     const userId = req.userId;

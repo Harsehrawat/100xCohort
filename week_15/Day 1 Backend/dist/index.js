@@ -138,6 +138,22 @@ app.post("/api/content", middleware_1.userMiddleware, (req, res) => __awaiter(vo
         res.status(500).json({ message: "server error" });
     }
 }));
+app.get("/api/content", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = req.userId;
+    // from content model return content w/ this user id
+    try {
+        const user = yield db_1.UserModel.findOne({ _id: userId }).select("username");
+        const content = yield db_2.ContentModel.find({ userId: userId });
+        if (content.length != 0)
+            res.status(200).json({ content, username: user === null || user === void 0 ? void 0 : user.username });
+        else
+            res.status(200).json({ message: "you have added nothing yet", username: user === null || user === void 0 ? void 0 : user.username });
+    }
+    catch (e) {
+        res.status(500).json({ message: "server error" });
+        console.log("error in .get(/api/content)");
+    }
+}));
 app.get("/api/content/:type", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req.userId;
     const { type } = req.params;

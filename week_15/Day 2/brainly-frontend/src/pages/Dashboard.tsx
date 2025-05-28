@@ -65,13 +65,15 @@ export function Dashboard() {
         )}
 
         {/* Content Grid */}
-        {!loading && !error && (
-          <div className="grid grid-cols-3 gap-4 p-4">
-            {content.map(({ _id, title, link, type }) => (
-              <Card key={_id} title={title} link={link} type={type} id={_id} />
-            ))}
-          </div>
-        )}
+        {/* Content Grid */}
+{!loading && !error && (
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 auto-rows-[350px] mt-6">
+    {content.map(({ _id, title, link, type }) => (
+      <Card key={_id} title={title} link={link} type={type} id={_id} />
+    ))}
+  </div>
+)}
+
       </div>
     </div>
   );
