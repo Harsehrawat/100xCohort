@@ -21,7 +21,7 @@ export function SideBarItem() {
     function fetchCategoryData(category: string) {
         // ToDo: Fetch data from backend based on category
         if(category === "All"){
-            navigate("/content");
+            navigate("/dashboard");
         }
         else if(category === "Tweet"){
             console.log("navigate called to :"+category)

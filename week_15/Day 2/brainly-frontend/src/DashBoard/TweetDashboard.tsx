@@ -79,7 +79,7 @@ export function TweetDashboard({ isGuestView }: TweetDashboardProps) {
         {loading && <p className="text-white text-center mt-4">Loading...</p>}
         {error && (
           <div className="text-white bg-red-500 p-4 rounded-md mt-4">
-            <p>Server is currently under maintenance</p>
+            <p> {error} </p>
           </div>
         )}
 

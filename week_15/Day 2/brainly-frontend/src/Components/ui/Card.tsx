@@ -66,17 +66,19 @@ export function Card({ title, type, link, id, isGuestView }: CardInterface) {
       </div>
 
       <div className="mt-4 mb-2 ml-2 mr-2 h-fit">
-        {type === "Youtube" && (
-          <iframe
-            className="w-full h-full"
-            src={link.replace("watch", "embed").replace("?v=", "/")}
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen
-          ></iframe>
-        )}
+      {type === "Youtube" && (
+  <iframe
+    className="w-full h-64 rounded-md"
+    src={`https://www.youtube.com/embed/${new URL(link).searchParams.get("v")}`}
+    title="YouTube video player"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerPolicy="strict-origin-when-cross-origin"
+    allowFullScreen
+  ></iframe>
+)}
+
+
         {type === "Tweet" && (
           <blockquote className="twitter-tweet vh-15">
             <a href={link.replace("x.com", "twitter.com")}></a>
