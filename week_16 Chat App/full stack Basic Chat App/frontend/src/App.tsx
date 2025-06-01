@@ -3,7 +3,7 @@ import './App.css'
 
 function App() {
  // State to store chat messages with initial "Hello from server!" message 
- const [messages, setMessages] = useState(["Hello from server!" ,"hello"])
+ const [messages, setMessages] = useState(["Hello from server!" ,"hey"])
  
  // Refs to store WebSocket connection and input element
  const wsRef = useRef(); // WebSocket connection reference
