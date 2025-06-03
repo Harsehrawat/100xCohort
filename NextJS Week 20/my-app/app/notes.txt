@@ -1,0 +1,20 @@
+____ GROUP ROUTING ____
+
+app/(auth)/signin/page.tsx
+app/(auth)/signup/page.tsx
+app/user/page.tsx
+
+now when i'd hit url : localhost:3000/signin would also work same as localhost:3000/user because i've applied 
+group Routing to (auth) by adding it into brackets which mean auth would be neglected by our file routing .
+
+now suppose i want to add a common layout to my signin and signup, so i can now inside (auth) easily add layout.tsx which would be applicable
+to folders conjecuent to this . (i.e. signin,signup).
+
+_______________________________________________________________
+
+____ DYNAMIC ROUTING ____
+
+suppose i want to create a url localhost:3000/blog/1 where 1 means id of block .
+now i can't keep creating 1,2,3...n subfolders inside blog folder and adding their logic.
+This is when DYNAMIC ROUTING comes to play.
+I'd create /blog/[postId] where now anything after post in the url would be treated as postId
