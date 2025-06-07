@@ -1,7 +1,7 @@
-import Image from "next/image";
+export const dynamic = "force-static";
 
 export default function Home() {
   return (
-    <div> Hi There</div>
+    <div>Hi There, SSG</div>
   )
 }
