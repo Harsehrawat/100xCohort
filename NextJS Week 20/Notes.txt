@@ -1,0 +1,41 @@
+Slide Link : https://projects.100xdevs.com/tracks/Next-Auth/La3EksBcKVqExEMwNAxa
+
+What is next auth ?
+next auth is library that lets u authenticate in next.js  .
+can u do it w/out next auth : yes  , should u do it w/out next auth : probably not .
+
+Why not use JWT + LocalStorage ?
+we are using nextJs for SSR, if we use JWT + localStorage to ƒetch the api once the page is loaded, then it is a CSR 
+rather than a SSR, killing the purpose of nextJS .
+And as nextJs server don't has access to your localStorage item so can't use JWT + LocalStorage method of authenticating
+ 
+
+** PTR : If u want to add a onClick to a button inside a component , to make it work add "use client" on top of file **
+
+Set up of nextAuth . 
+first paste this code : 
+{
+    import NextAuth  from "next-auth";
+
+    const handler = NextAuth();
+
+    export {handler as GET, handler as POST};
+}
+inside NextAuth we gona pass the providers as the parameter .
+
+
+How do i process all the outcomes of it in my HomePage ..
+nextJs provides us with useSession() stateHook accessing which we can 
+write "authenticated" or "unauthenticated" and get to know the current active status .
+// PTR. this useSession() must be wrapped inside <ServiceProvider>  </ServiceProvider> .
+// But this is a CSR as it's a react component .
+* use getServerSession to enable SSR 
+for getServerSession , inside route.tsx , along with providers, mention your NextAuth_SECRET .
+
+
+//-- PTR //
+✅ useSession() gives "authenticated" / "unauthenticated" status.
+✅ Must use <SessionProvider> when using useSession().
+✅ Don't use getServerSession() in Client Components — it's for Server Components only.
+✅ "use client" is required for using onClick, hooks, and interactive React logic.
+// PTR  --//
