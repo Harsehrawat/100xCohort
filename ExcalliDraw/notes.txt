@@ -1,0 +1,15 @@
+*Used pnpm rather than npm
+*made it a turbo-repo project
+
+*added package.json to http-backend and ws-backend using npm init -y inside apps directory
+
+-- Steps i did before writing actual code --
+* initialised an empty turbo repo
+* deleted the docs apps
+* added http-backend, ws-backend
+* added package.json in both the places
+* added tsconfig.json in both the places and imported it from @repo/typescript-config/base.json 
+* added @repo/typescript-config as a dependency in both ws-backend and http-backend 
+* added a build, dev and start to both the places 
+* update the turbo-config in both the places 
+* initialise a http server, a websocket server 
