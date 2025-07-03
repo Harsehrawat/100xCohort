@@ -22,7 +22,7 @@ model User {
   email String @unique
   password String
   name  String
-  avatarPhoto String // we'll not store the photo rahter store the url of the photo in the DB
+  avatarPhoto String? // we'll not store the photo rahter store the url of the photo in the DB
   rooms   Room[]
   chat  Chat[]
 }
