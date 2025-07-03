@@ -10,6 +10,13 @@
 * added package.json in both the places
 * added tsconfig.json in both the places and imported it from @repo/typescript-config/base.json 
 * added @repo/typescript-config as a dependency in both ws-backend and http-backend 
-* added a build, dev and start to both the places 
+* added a build, dev and start to both the places n 
 * update the turbo-config in both the places 
 * initialise a http server, a websocket server 
+* initialise a new 'db' package where you write the schema of the project
+* import the db package into the http-layer where u'll start putting the things in the db 
+* add a common package where we add the zod schema and the JWT_SECRET .
+
+
+-- inside db --
+* pnpm install prisma -> npx prisma init -> get postgreDB from neon.tech -> npx prisma migrate dev --name init_schema
