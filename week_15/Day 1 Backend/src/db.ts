@@ -1,9 +1,8 @@
 import mongoose, { Mongoose, Types, Document } from "mongoose";
 import { model, Schema } from "mongoose";
 import { string } from "zod";
-import { MONGO_URL } from "./config";
 const ObjectId = mongoose.Types.ObjectId;
-mongoose.connect(MONGO_URL);
+mongoose.connect("mongodb+srv://harsehrawat:VGV4e7QDzTVzwiYt@cluster0.lgwkk.mongodb.net/second-brain");
 
 export interface IUser extends Document{
     username : string,
@@ -23,11 +22,11 @@ const ContentSchema = new Schema({
         type: mongoose.Types.ObjectId,
         ref : 'user'
      }],
-    userId : {
+    userId : [{
         type : mongoose.Types.ObjectId ,
         ref : 'user',
         require : true
-    }
+    }]
 })
 
 const LinkSchema = new Schema({

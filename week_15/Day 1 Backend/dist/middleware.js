@@ -7,6 +7,7 @@ exports.userMiddleware = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = require("./config");
 const userMiddleware = (req, res, next) => {
+    console.log("inside userMiddleware");
     const receivedToken = req.headers["authorization"];
     const decodedToken = jsonwebtoken_1.default.verify(receivedToken, config_1.JWT_SECRET_KEY);
     if (decodedToken) {

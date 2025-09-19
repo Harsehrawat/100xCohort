@@ -58,6 +58,7 @@ const inputValidation = Joi.object({
         .required()
 });
 app.post("/api/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("Received signup request:", req.body);
     const { error } = inputValidation.validate(req.body);
     if (error) {
         return res.status(403).json({ message: error.details[0].message });
@@ -91,6 +92,7 @@ app.post("/api/signup", (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 }));
 app.post("/api/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("inside /api/signin");
     const { username, password } = req.body;
     try {
         const verifyUsername = yield db_1.UserModel.findOne({ username });
@@ -117,6 +119,7 @@ app.post("/api/signin", (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 }));
 app.post("/api/content", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("inside /api/content");
     const { title, link, type } = req.body;
     try {
         if (title == null || link === null || type === null) {
@@ -140,6 +143,7 @@ app.post("/api/content", middleware_1.userMiddleware, (req, res) => __awaiter(vo
 }));
 app.get("/api/content", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req.userId;
+    console.log("inside /api/content get");
     // from content model return content w/ this user id
     try {
         const user = yield db_1.UserModel.findOne({ _id: userId }).select("username");
@@ -157,6 +161,7 @@ app.get("/api/content", middleware_1.userMiddleware, (req, res) => __awaiter(voi
 app.get("/api/content/:type", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req.userId;
     const { type } = req.params;
+    console.log("inside /api/content/:type get");
     // from contentModel return content w/ this userId
     try {
         // fetch username to always display regardless if any content added or not
@@ -176,6 +181,7 @@ app.get("/api/content/:type", middleware_1.userMiddleware, (req, res) => __await
 }));
 app.delete("/api/delete/content/:contentId", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { contentId } = req.params;
+    console.log("inside /api/delete/content/:contentId delete");
     // find and return 
     try {
         yield db_2.ContentModel.deleteMany({
@@ -190,6 +196,7 @@ app.delete("/api/delete/content/:contentId", middleware_1.userMiddleware, (req, 
 }));
 app.post("/api/share/content", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const share = req.body.share;
+    console.log("inside /api/share/content post");
     try {
         if (share) {
             const existingLink = db_3.LinkModel.findOne({ userId: req.userId });
@@ -219,6 +226,7 @@ app.post("/api/share/content", middleware_1.userMiddleware, (req, res) => __awai
 }));
 app.get("/api/share/:sharableLink", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const hash = req.params.sharableLink;
+    console.log("inside /api/share/:sharableLink get");
     // verify hash is associated w/ LinkModel
     const link = yield db_3.LinkModel.findOne({ hash });
     if (!link) {

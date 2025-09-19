@@ -54,7 +54,7 @@ const inputValidation = Joi.object({
 
 
 app.post("/api/signup", async (req: Request, res: Response): Promise<any> => {
-
+  console.log("Received signup request:", req.body);
   const {error} = inputValidation.validate(req.body);
   if(error){
     return res.status(403).json({message : error.details[0].message});
@@ -93,6 +93,7 @@ app.post("/api/signup", async (req: Request, res: Response): Promise<any> => {
   
 
   app.post("/api/signin", async (req, res) => {
+    console.log("inside /api/signin");
     const { username, password } = req.body;
 
     try {
@@ -122,6 +123,7 @@ app.post("/api/signup", async (req: Request, res: Response): Promise<any> => {
     
 
 app.post("/api/content",userMiddleware ,async (req, res)=>{
+  console.log("inside /api/content");
     const {title , link, type} = req.body;
     try{
       if(title==null || link===null || type===null){
@@ -146,6 +148,7 @@ app.post("/api/content",userMiddleware ,async (req, res)=>{
 
 app.get("/api/content",userMiddleware, async (req,res) =>{
   const userId = req.userId;
+  console.log("inside /api/content get");
   // from content model return content w/ this user id
   try{
     const user = await UserModel.findOne({ _id : userId}).select("username");
@@ -162,6 +165,7 @@ app.get("/api/content",userMiddleware, async (req,res) =>{
 app.get("/api/content/:type",userMiddleware, async (req,res)=>{
     const userId = req.userId;
     const {type} = req.params;
+    console.log("inside /api/content/:type get");
     // from contentModel return content w/ this userId
     try{
         // fetch username to always display regardless if any content added or not
@@ -182,6 +186,7 @@ app.get("/api/content/:type",userMiddleware, async (req,res)=>{
 
 app.delete("/api/delete/content/:contentId", userMiddleware,async (req,res)=>{
     const {contentId} = req.params;
+    console.log("inside /api/delete/content/:contentId delete");
     // find and return 
     try{
         await ContentModel.deleteMany({
@@ -198,6 +203,7 @@ app.delete("/api/delete/content/:contentId", userMiddleware,async (req,res)=>{
 
 app.post("/api/share/content",userMiddleware , async (req,res)=>{
     const share = req.body.share;
+    console.log("inside /api/share/content post");
     try{
       if(share){
         const existingLink = LinkModel.findOne({ userId : req.userId});
@@ -225,6 +231,7 @@ app.post("/api/share/content",userMiddleware , async (req,res)=>{
 
 app.get("/api/share/:sharableLink", async (req,res)=>{
     const hash = req.params.sharableLink;
+    console.log("inside /api/share/:sharableLink get");
     // verify hash is associated w/ LinkModel
     const link = await LinkModel.findOne({ hash });
     if(!link){
